@@ -1,0 +1,23 @@
+name: Deploy to OCI
+
+on:
+  push:
+    branches:
+      - dev
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout Code
+      uses: actions/checkout@v3
+
+    - name: Deploy to Server
+      uses: appleboy/ssh-action@v0.1.4
+      with:
+        host: gamma.23.net.pl
+        username: gamma23
+        key: ${{ secrets.GAMMA23_DEPLOY_SECRET }}
+        script: |
+          ~/deploy.sh
