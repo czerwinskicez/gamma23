@@ -1,7 +1,6 @@
 // consoleLogging.js
 const db = require('./database');
 
-// Preserve original console methods
 const originalConsole = {
   log: console.log,
   info: console.info,
@@ -9,11 +8,6 @@ const originalConsole = {
   error: console.error,
 };
 
-/**
- * Converts arguments to a single string.
- * @param {Array} args - The console arguments.
- * @returns {string} - The concatenated string.
- */
 function argsToString(args) {
   return args.map(arg => {
     if (typeof arg === 'object') {
@@ -27,10 +21,6 @@ function argsToString(args) {
   }).join(' ');
 }
 
-/**
- * Overrides console methods to log messages to the database.
- * @param {boolean} isLoggingEnabled - Flag indicating if logging is enabled.
- */
 function overrideConsoleMethods(isLoggingEnabled) {
   if (!isLoggingEnabled) {
     // If logging is disabled, do not override console methods
@@ -40,7 +30,7 @@ function overrideConsoleMethods(isLoggingEnabled) {
   console.log = async (...args) => {
     const message = argsToString(args);
     try {
-      await db.runAsync(`INSERT INTO errors (type, message) VALUES (?, ?)`, ['log', message]);
+      await db.runAsync(`INSERT INTO console_messages (type, message) VALUES (?, ?)`, ['log', message]);
     } catch (err) {
       originalConsole.error("Failed to log to database:", err.message);
     }
@@ -50,7 +40,7 @@ function overrideConsoleMethods(isLoggingEnabled) {
   console.info = async (...args) => {
     const message = argsToString(args);
     try {
-      await db.runAsync(`INSERT INTO errors (type, message) VALUES (?, ?)`, ['info', message]);
+      await db.runAsync(`INSERT INTO console_messages (type, message) VALUES (?, ?)`, ['info', message]);
     } catch (err) {
       originalConsole.error("Failed to log to database:", err.message);
     }
@@ -60,7 +50,7 @@ function overrideConsoleMethods(isLoggingEnabled) {
   console.warn = async (...args) => {
     const message = argsToString(args);
     try {
-      await db.runAsync(`INSERT INTO errors (type, message) VALUES (?, ?)`, ['warn', message]);
+      await db.runAsync(`INSERT INTO console_messages (type, message) VALUES (?, ?)`, ['warn', message]);
     } catch (err) {
       originalConsole.error("Failed to log to database:", err.message);
     }
@@ -70,7 +60,7 @@ function overrideConsoleMethods(isLoggingEnabled) {
   console.error = async (...args) => {
     const message = argsToString(args);
     try {
-      await db.runAsync(`INSERT INTO errors (type, message) VALUES (?, ?)`, ['error', message]);
+      await db.runAsync(`INSERT INTO console_messages (type, message) VALUES (?, ?)`, ['error', message]);
     } catch (err) {
       originalConsole.error("Failed to log to database:", err.message);
     }

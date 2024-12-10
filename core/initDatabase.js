@@ -1,35 +1,23 @@
 // initDatabase.js
 const db = require('./database');
 
-/**
- * Initializes the errors table.
- * @returns {Promise<boolean>} - Resolves to true if successful, false otherwise.
- */
-async function initializeErrorsTable() {
+async function initializeConsoleMessagesTable() {
   try {
     await db.runAsync(`
-      CREATE TABLE IF NOT EXISTS errors (
+      CREATE TABLE IF NOT EXISTS console_messages (
         id INTEGER PRIMARY KEY AUTOINCREMENT,
         type TEXT NOT NULL,
         message TEXT NOT NULL,
         created_at DATETIME DEFAULT CURRENT_TIMESTAMP
       )
     `);
-    await db.runAsync(`
-      CREATE TABLE IF NOT EXISTS users (
-        id INTEGER PRIMARY KEY AUTOINCREMENT,
-        username TEXT NOT NULL,
-        password TEXT NOT NULL,
-        created_at DATETIME DEFAULT CURRENT_TIMESTAMP
-      )  
-    `);
-    console.info("Errors table exists. Enabling error logging...");
+    console.info("Console Messages table exists. Logging (should be) enabled.");
     return true; // Logging enabled
   } catch (err) {
-    console.warn("Error creating errors table:", err.message);
-    console.warn("Error logging disabled.");
+    console.warn("Error creating console messages table:", err.message);
+    console.warn("Logging disabled.");
     return false; // Logging disabled
   }
 }
 
-module.exports = initializeErrorsTable;
+module.exports = initializeConsoleMessagesTable;

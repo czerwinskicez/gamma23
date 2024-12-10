@@ -3,7 +3,7 @@ const express = require('express');
 const path = require('path');
 
 require("./core/consolePrefixes");
-const initializeErrorsTable = require('./core/initDatabase');
+const initializeConsoleMessagesTable = require('./core/initDatabase');
 const overrideConsoleMethods = require('./core/consoleLogging');
 const db = require('./core/database');
 
@@ -30,7 +30,7 @@ app.get('/login', (req, res) => {
   let isLoggingEnabled = false;
 
   try {
-    isLoggingEnabled = await initializeErrorsTable();
+    isLoggingEnabled = await initializeConsoleMessagesTable();
   } catch (err) {
     console.warn("Unexpected error during error logging initialization:", err.message);
   }
