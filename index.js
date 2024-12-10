@@ -18,6 +18,7 @@ app.use(express.urlencoded({ extended: true }));
 // Serve static files
 app.use("/public", express.static(path.join(__dirname, "public")));
 app.use("/bootstrap", express.static(path.join(__dirname, "node_modules/bootstrap")));
+app.use("/bootstrap-icons", express.static(path.join(__dirname, "node_modules/bootstrap-icons")));
 
 // Set EJS as the templating engine
 app.set("view engine", "ejs");
@@ -31,7 +32,7 @@ app.get("/", (req, res) => {
 // Render the login page
 app.get('/login', (req, res) => {
     return res.render("layout", {
-        filename: `index`
+        filename: `start`
     });
 });
 
@@ -107,14 +108,14 @@ async function verifyTokenMiddleware(req, res, next) {
 // app.get('/api/dashboard-data', verifyTokenMiddleware, (req, res) => {
 //     res.json({ message: `Welcome, ${req.user.username}!` });
 // });
-app.get('/api/dashboard-data', verifyTokenMiddleware, (req, res) => {
-  res.render('dashboardRender', { username: req.user.username });
+app.get('/api/dashboard-data/:panelContext', verifyTokenMiddleware, (req, res) => {
+  res.render(`panel/${req.params.panelContext}`, { username: req.user.username });
 });
 
 // Render the dashboard page
 app.get('/dashboard', (req, res) => {
     return res.render('layout', { 
-        filename: 'dashboard', 
+        filename: 'context', 
         // You can pass additional variables if needed
     });
 });

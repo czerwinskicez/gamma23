@@ -38,7 +38,7 @@ _Signals.signalHandler = {
 
 Signals = new Proxy(Signals, _Signals.signalHandler);
 
-_Signals.listenToSignalsInterval = setInterval(_=>{
+_Signals.signalClock = _Signals.signalClock || setInterval(_=>{
     document.querySelectorAll("signal:not([dispatched])").forEach(signalToDispatch=>{
         Signals[signalToDispatch.getAttribute("key")]=signalToDispatch.innerHTML;
         signalToDispatch.setAttribute("dispatched", "true");

@@ -21,7 +21,7 @@ const initializeUsers = () => {
                     if (err) return reject(err);
                     if (row.count === 0) {
                         // No users, create default root user
-                        const hashedPassword = await bcrypt.hash('root', 10);
+                        const hashedPassword = await bcrypt.hash(process.env.INITIAL_ROOT_PASSWORD, 10);
                         db.run(`INSERT INTO users (username, password) VALUES (?, ?)`, ['root', hashedPassword], (err) => {
                             if (err) return reject(err);
                             console.log("Root user created with username 'root' and password 'root'.");

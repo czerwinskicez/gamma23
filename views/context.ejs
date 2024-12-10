@@ -1,0 +1,163 @@
+<!-- views/dashboard.ejs -->
+<style>
+  .username {
+    margin-right: 16px;
+  }
+  .main-nav{
+    margin-bottom: 10px;
+  }
+  .sidebar-nav{
+    padding-right: 0;
+  }
+  .sidebar-nav .list-group:not(:last-child){
+    padding-bottom: 10px;
+  }
+  .sidebar-user h5{
+    padding-top: 8px;
+    padding-bottom: 8px;
+  }
+  .sidenav-manage-account{
+    display: block;
+    padding-top: 8px;
+  }
+  .sidebar-nav a.active{
+    opacity: 0.8;
+    color: black;
+  }
+  #dashboard-content{
+    min-height: 100%;
+  }
+</style>
+
+<nav class="navbar bg-body-secondary main-nav">
+  <div class="container-fluid">
+    <a class="navbar-brand" href="#">
+      <img src="/public/gamma23_logo.png" alt="Gamma23 logo" width="30" height="30"
+        class="d-inline-block align-text-top">
+      Gamma Analytics Dashboard
+    </a>
+    <div>
+      <span class="username" signal-key="username"></span>
+      <button id="logout-button" class="btn btn-outline-light">Logout</button>
+    </div>
+  </div>
+</nav>
+<div class="container-fluid" class="dashboard-content-body dashboard-content-body">
+  <div class="row">
+    <div class="col-xs-12 col-md-4 col-lg-3 col-xl-2 sidebar-nav">
+      <ul class="list-group">
+        <a href="#" class="list-group-item list-group-item-action sidebar-user" context-button="manageAccount">
+          <div class="d-flex w-100 justify-content-between">
+            <h5 class='mb-1' signal-key="username"></h5>
+          </div>
+          <p class="mb-1">System Administrator</p>
+          <small class="sidenav-manage-account">Manage account</small>
+        </a>
+      </ul>
+      <ul class="list-group">
+        <a href="#" class="list-group-item list-group-item-action active" context-button="dashboard">Dashboard</a>
+      </ul>
+      <ul class="list-group">
+        <a href="#" class="list-group-item list-group-item-action" context-button="eventStream">Event stream</a>
+        <a href="#" class="list-group-item list-group-item-action" context-button="allowedDomains">Allowed domains</a>
+        <a href="#" class="list-group-item list-group-item-action" context-button="geolocationAnalytics">Geolocation analytics</a>
+        <a href="#" class="list-group-item list-group-item-action" context-button="segments">Segments</a>
+      </ul>
+      <ul class="list-group">
+        <a href="#" class="list-group-item list-group-item-action" context-button="webCampaigns">Web campaigns</a>
+        <a href="#" class="list-group-item list-group-item-action" context-button="serverSideCampaigns">Server-side campaigns</a>
+      </ul>
+      <ul class="list-group">
+        <a href="#" class="list-group-item list-group-item-action" context-button="manageUsers">Manage users</a>
+        <a href="#" class="list-group-item list-group-item-action" context-button="userPermissions">User permissions</a>
+        <a href="#" class="list-group-item list-group-item-action" context-button="manageInstances">Manage instances</a>
+      </ul>
+      <ul class="list-group">
+        <a href="#" class="list-group-item list-group-item-action" context-button="localUserSettings">Local user settings</a>
+      </ul>
+
+    </div>
+    <div class="col">
+      <div class="container-fluid card" id="dashboard-content"></div>
+    </div>
+  </div>
+</div>
+
+<script>
+  document.querySelectorAll("[context-button]").forEach(contextButton=>{
+    contextButton.addEventListener("click", _=>{
+      fetchContext(contextButton.getAttribute("context-button"));
+    });
+  });
+
+  const fetchContext = (contextToFetch) => {
+    const dashboardContent = document.getElementById('dashboard-content');
+    const token = sessionStorage.getItem('token');
+
+    // Fetch the authenticated context content
+    fetch(`/api/dashboard-data/${contextToFetch}`, {
+      method: 'GET',
+      headers: {
+        'x-bearer': token
+      }
+    }).then(async response => {
+      if (response.ok) {
+        const html = await response.text();
+        dashboardContent.innerHTML = html;
+
+        document.querySelectorAll(".active[context-button]").forEach(activeContextButton=>{
+          activeContextButton.classList.remove("active");
+        });
+        document.querySelectorAll(`[context-button="${contextToFetch}"]`).forEach(activeContextButton=>{
+          activeContextButton.classList.add("active");
+        });
+      } else {
+        // Token might be invalid or expired
+        sessionStorage.removeItem('token');
+        window.location.href = '/login';
+      }
+    })
+    .catch(error => {
+      console.error('Error fetching dashboard content:', error);
+      // sessionStorage.removeItem('token');
+      // window.location.href = '/login';
+    });
+  };
+
+  document.addEventListener('DOMContentLoaded', () => {
+    const logoutButton = document.getElementById('logout-button');
+
+    const token = sessionStorage.getItem('token');
+
+    if (!token) {
+      // No token found, redirect to login
+      window.location.href = '/login';
+      return;
+    }
+
+    fetchContext("dashboard");
+
+    // Logout functionality
+    logoutButton.addEventListener('click', async () => {
+      try {
+        const response = await fetch('/api/logout', {
+          method: 'POST',
+          headers: {
+            'x-bearer': token
+          }
+        });
+
+        if (response.ok) {
+          sessionStorage.removeItem('token');
+          window.location.href = '/login';
+        } else {
+          const data = await response.json();
+          alert(data.message || 'Logout failed.');
+        }
+      } catch (error) {
+        console.error('Error during logout:', error);
+        alert('An error occurred. Please try again.');
+      }
+    });
+  });
+</script>
