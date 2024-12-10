@@ -5,4 +5,8 @@ $dark-body-bg: #232323;
 $dark-body-color: #eeee;
 $body-secondary-bg-dark: #323223;
 
+signal{
+    display: none;
+}
+
 @import "../node_modules/bootstrap/scss/bootstrap.scss";

@@ -1,50 +1,114 @@
-<style>
+<!-- views/layout.ejs -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Gamma Analytics - Login</title>
+  <link rel="stylesheet" href="/bootstrap/css/bootstrap.min.css">
+  <style>
     .login-page{
-        display: grid;
-        align-items: center;
-        height: 90dvh;
+      display: grid;
+      align-items: center;
+      height: 90dvh;
     }
     .login-card{
-        margin-top: 40px;
+      margin-top: 40px;
     }
     .login-card .login-card-wrapper{ 
-        padding-bottom: 16px;
+      padding-bottom: 16px;
     }
     .login-card .login-logo{
-        width: 232px;
-        margin-left: auto;
-        margin-right: auto;
+      width: 232px;
+      margin-left: auto;
+      margin-right: auto;
     }
     .login-card h2{
-        margin-top: 23px;
+      margin-top: 23px;
     }
     .credentials-box input,
     .credentials-box button{
-        margin-top: 10px;
-        margin-bottom: 10px;
+      margin-top: 10px;
+      margin-bottom: 10px;
     }
-</style>
+    #message-box {
+      color: red;
+      margin-top: 10px;
+    }
+  </style>
+</head>
+<body>
+  <div class="login-page">
+      <div class="container login-card">
+          <div class="row">
+              <div class="col"></div>
+              <div class="col-xs-12 col-sm-10 col-md-8 col-lg-6 col-xl-4">
+                  <div class="card bg-body-secondary login-card-wrapper">
+                      <h2 class="text-center">Gamma Analytics</h2>
+                      <img src="/public/gamma23_logo.png" alt="Gamma23 service logo" class="login-logo">
+                      <div class="container text-center credentials-box">
+                          <div class="input-group">
+                              <input type="text" class="form-control" id="login" placeholder="Username">
+                          </div>
+                          <div class="input-group">
+                              <input type="password" class="form-control" id="password" placeholder="Password">
+                          </div>
+                          <button class="btn btn-primary btn-lg">Login</button>
+                          <div id="message-box"></div>
+                      </div>
+                  </div>
+              </div>
+              <div class="col"></div>
+          </div>
+      </div>
+  </div>
 
-<div class="login-page">
-    <div class="container login-card">
-        <div class="row">
-            <div class="col"></div>
-            <div class="col-xs-12 col-sm-10 col-md-8 col-lg-6 col-xl-4">
-                <div class="card bg-body-secondary login-card-wrapper">
-                    <h2 class="text-center">Gamma Analytics</h2>
-                    <img src="/public/gamma23_logo.png" alt="Gamma23 service logo" class="login-logo">
-                    <div class="container text-center credentials-box">
-                        <div class="input-group">
-                            <input type="text" class="form-control" id="login" placeholder="Username">
-                        </div>
-                        <div class="input-group">
-                            <input type="password" class="form-control" id="password" placeholder="Password">
-                        </div>
-                        <button class="btn btn-primary btn-lg">Login</button>
-                    </div>
-                </div>
-            </div>
-            <div class="col"></div>
-        </div>
-    </div>
-</div>
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      const loginButton = document.querySelector('.credentials-box button');
+      const usernameInput = document.getElementById('login');
+      const passwordInput = document.getElementById('password');
+      const messageBox = document.getElementById('message-box');
+
+      loginButton.addEventListener('click', async () => {
+        const username = usernameInput.value.trim();
+        const password = passwordInput.value.trim();
+
+        // Clear previous messages
+        messageBox.textContent = '';
+
+        if (!username || !password) {
+          displayMessage('Please enter both username and password.');
+          return;
+        }
+
+        try {
+          const response = await fetch('/api/login', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ username, password })
+          });
+
+          const data = await response.json();
+
+          if (response.ok) {
+            sessionStorage.setItem('token', data.token);
+            // Redirect to dashboard or another protected page
+            window.location.href = '/dashboard';
+          } else {
+            displayMessage(data.message || 'Login failed');
+          }
+        } catch (error) {
+          console.error('Error during login:', error);
+          displayMessage('An error occurred. Please try again.');
+        }
+      });
+
+      function displayMessage(message) {
+        messageBox.textContent = message;
+      }
+    });
+  </script>
+</body>
+</html>
