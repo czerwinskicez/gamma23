@@ -1,11 +1,8 @@
 $primary: yellow;
+
+$btn-primary-hover-bg: darken($primary, 15%);
 $dark-body-bg: #232323;
 $dark-body-color: #eeee;
 $body-secondary-bg-dark: #323223;
-
-.btn-primary:hover,
-.btn-primary:active{
-    opacity: 0.88;
-}
 
 @import "../node_modules/bootstrap/scss/bootstrap.scss";
