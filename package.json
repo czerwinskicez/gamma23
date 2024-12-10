@@ -5,11 +5,17 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "node index.js"
+    "start": "node index.js",
+    "dev": "nodemon index.js & npx sass --style=compressed --watch sass/bootstrap-g23.scss public/css/bootstrap-main.css",
+    "build": "sass --style=compressed sass/bootstrap-g23.scss public/css/bootstrap-main.css"
   },
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "express": "^4.21.2"
+    "bootstrap": "^5.3.3",
+    "ejs": "^3.1.10",
+    "express": "^4.21.2",
+    "nodemon": "^3.1.7",
+    "sass": "^1.82.0"
   }
 }
