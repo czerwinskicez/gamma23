@@ -1,5 +1,5 @@
 // consoleLogging.js
-const db = require('../database/database');
+const db = require('./database');
 
 // Preserve original console methods
 const originalConsole = {
