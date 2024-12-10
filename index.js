@@ -14,7 +14,9 @@ app.get("/", (req, res) => {
     return res.redirect("/login");
 });
 app.get('/login', (req, res) => {
-    return res.render("index");
+    return res.render("layout", {
+        filename: `index`
+    });
 });
 
 app.listen(port, () => console.log(`App running at http://localhost:${port}`));
