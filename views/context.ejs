@@ -3,11 +3,10 @@
   .username {
     margin-right: 16px;
   }
-  .main-nav{
-    margin-bottom: 10px;
-  }
-  .sidebar-nav{
-    padding-right: 0;
+  @media (min-width: 768px) {
+    .sidebar-nav{
+      padding-right: 0;
+    }
   }
   .sidebar-nav .list-group:not(:last-child){
     padding-bottom: 10px;
@@ -37,6 +36,11 @@
     width: 5rem;
     height: 5rem;
   }
+  .dashboard-content-wrapper,
+  .sidebar-nav{
+    margin-top: 10px;
+    margin-bottom: 10px;
+  }
 </style>
 
 <nav class="navbar bg-body-secondary main-nav">
@@ -52,7 +56,7 @@
     </div>
   </div>
 </nav>
-<div class="container-fluid" class="dashboard-content-body dashboard-content-body">
+<div class="container-fluid dashboard-content-body dashboard-content-body">
   <div class="row">
     <div class="col-xs-12 col-md-4 col-lg-3 col-xl-2 sidebar-nav">
       <ul class="list-group">
@@ -65,7 +69,7 @@
         </a>
       </ul>
       <ul class="list-group">
-        <a href="#" class="list-group-item list-group-item-action active" context-button="dashboard">Dashboard</a>
+        <a href="#" class="list-group-item list-group-item-action" context-button="dashboard">Dashboard</a>
       </ul>
       <ul class="list-group">
         <a href="#" class="list-group-item list-group-item-action" context-button="eventStream">Event stream</a>
@@ -79,6 +83,7 @@
       </ul>
       <ul class="list-group">
         <a href="#" class="list-group-item list-group-item-action" context-button="manageUsers">Manage users</a>
+        <a href="#" class="list-group-item list-group-item-action" context-button="editUser">Edit user</a>
         <a href="#" class="list-group-item list-group-item-action" context-button="userPermissions">User permissions</a>
       </ul>
       <ul class="list-group">
@@ -91,7 +96,7 @@
       </ul>
 
     </div>
-    <div class="col">
+    <div class="col dashboard-content-wrapper">
       <div class="container-fluid card" id="dashboard-content"></div>
     </div>
   </div>
@@ -99,6 +104,7 @@
 
 
 <script>
+
   document.querySelectorAll("[context-button]").forEach(contextButton=>{
     contextButton.addEventListener("click", _=>{
       fetchContext(contextButton.getAttribute("context-button"));
@@ -106,6 +112,7 @@
   });
 
   const fetchContext = (contextToFetch) => {
+    setTimeout(_=>{window.location.hash = contextToFetch;}, 0);
     const dashboardContent = document.getElementById('dashboard-content');
     const token = sessionStorage.getItem('token');
 
@@ -148,6 +155,15 @@
   };
 
   document.addEventListener('DOMContentLoaded', () => {
+    
+    if (window.location.hash.length == 0) {
+      fetchContext("dashboard");
+    } else {
+      if (window.location.hash.startsWith("#")) {
+        fetchContext(location.hash.slice(1));
+      }
+    }
+
     const logoutButton = document.getElementById('logout-button');
 
     const token = sessionStorage.getItem('token');
@@ -158,7 +174,6 @@
       return;
     }
 
-    fetchContext("dashboard");
 
     // Logout functionality
     logoutButton.addEventListener('click', async () => {
