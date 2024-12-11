@@ -1,4 +1,3 @@
-// index.js
 require('dotenv').config(); // Load environment variables
 const express = require('express');
 const path = require('path');
@@ -8,6 +7,7 @@ const beautifyConsole = require("./core/consolePrefixes");
 const initializeConsoleMessagesTable = require('./core/initDatabase');
 const overrideConsoleMethods = require('./core/consoleLogging');
 const userModule = require('./core/initUsers');
+const permissionModule = require("./core/initPermissions");
 
 const app = express();
 const port = process.env.PORT || 4000;
@@ -75,39 +75,98 @@ app.post('/api/logout', verifyTokenMiddleware, async (req, res) => {
     }
 });
 
+
+// Middleware to verify if user has permission for a given action
+async function verifyPermission(req, res, next) {
+  const { action } = req.params;
+  console.log("Action:", action); // Debug
+
+  try {
+      if (req.user.isAdmin) {
+          console.log("User is admin"); // Debug
+          return next();
+      }
+
+      const userPermissions = await userModule.getUserPermissions(req.user.id);
+      console.log("User Permissions:", userPermissions); // Debug
+
+      if (userPermissions.includes(action)) {
+          return next();
+      }
+
+      return res.status(403).json({ message: "Forbidden: You don't have permission for this action." });
+  } catch (err) {
+      console.error("Permission verification error:", err);
+      return res.status(500).json({ message: "Internal server error." });
+  }
+}
+
 // Middleware to verify token using 'x-bearer' header
 async function verifyTokenMiddleware(req, res, next) {
-    const bearerHeader = req.headers['x-bearer'];
-    if (!bearerHeader) return res.status(401).json({ message: 'No token provided' });
+  const bearerHeader = req.headers['x-bearer'];
+  console.log("Token received:", bearerHeader); // Debug
 
-    const token = bearerHeader;
-    if (!token) return res.status(401).json({ message: 'Invalid token format' });
+  if (!bearerHeader) return res.status(401).json({ message: 'No token provided' });
+  const token = bearerHeader;
 
-    try {
-        const tokenData = await userModule.verifyToken(token);
-        if (!tokenData) {
-            return res.status(403).json({ message: 'Invalid or expired token' });
-        }
+  try {
+      const tokenData = await userModule.verifyToken(token);
+      console.log("Token Data:", tokenData); // Debug
 
-        // Retrieve user information by ID
-        const user = await userModule.getUserById(tokenData.user_id);
+      if (!tokenData) {
+          return res.status(403).json({ message: 'Invalid or expired token' });
+      }
 
-        if (!user) {
-            return res.status(403).json({ message: 'Invalid token: user does not exist' });
-        }
+      const user = await userModule.getUserById(tokenData.user_id);
+      console.log("User Data:", user); // Debug
 
-        req.user = { id: user.id, username: user.username, displayName: user.display_name, title: user.title, isAdmin: user.is_admin};
-        req.token = token; // Attach token to request for logout
-        next();
-    } catch (err) {
-        console.error("Token verification error:", err);
-        return res.status(500).json({ message: 'Internal server error' });
-    }
+      if (!user) {
+          return res.status(403).json({ message: 'Invalid token: user does not exist' });
+      }
+
+      req.user = {
+          id: user.id,
+          username: user.username,
+          displayName: user.display_name,
+          title: user.title,
+          isAdmin: user.is_admin,
+      };
+      req.token = token;
+      next();
+  } catch (err) {
+      console.error("Token verification error:", err);
+      return res.status(500).json({ message: 'Internal server error' });
+  }
 }
+
+app.post('/api/authorized/:action', verifyTokenMiddleware, verifyPermission, async (req, res) => {
+  const { action } = req.params;
+  console.log(`Action: ${action}`); // Debug
+  console.log(`Request Body:`, req.body); // Debug
+
+  if (action === "createUser") {
+      const { username, password, displayName, title } = req.body;
+
+      if (!username || !password) {
+        return res.status(400).json({ message: "Username and password are required." });
+      }
+
+      try {
+          const hashedPassword = await bcrypt.hash(password, 10);
+          await userModule.addUser({ username, password: hashedPassword, displayName, title });
+          return res.json({ message: "User created successfully." });
+      } catch (err) {
+          console.error("Error creating user:", err);
+          return res.status(500).json({ message: "Internal server error." });
+      }
+  }
+
+  return res.status(400).json({ message: `Action '${action}' is not supported.` });
+});
 
 // API endpoint to fetch protected dashboard data
 app.get('/api/dashboard-data/:panelContext', verifyTokenMiddleware, (req, res) => {
-  try{
+  try {
     res.render(`panel/${req.params.panelContext}`, req.user);
   } catch (err) {
     res.render(`panel/error.ejs`, {
@@ -121,7 +180,6 @@ app.get('/api/dashboard-data/:panelContext', verifyTokenMiddleware, (req, res) =
 app.get('/dashboard', (req, res) => {
     return res.render('layout', { 
         filename: 'context', 
-        // You can pass additional variables if needed
     });
 });
 
@@ -134,6 +192,16 @@ app.get('/dashboard', (req, res) => {
         console.error("Initialization error:", err);
         process.exit(1);
     }
+
+    try {
+      await permissionModule.initializePermissions();
+      console.log("Permissions table initialized.");
+    } catch (err) {
+        console.error("Error initializing permissions:", err);
+        process.exit(1);
+    }
+
+    // Removed the duplicate initializeUsers() call here, as it's already called above.
 
     try {
         let isLoggingEnabled = false;

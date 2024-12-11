@@ -1,5 +1,69 @@
 <div class="container">
     <div class="mt-4">
-        <h2>Manage users</h2>
+        <h2>Manage Users</h2>
     </div>
+    <div class="mt-4">
+        <div class="mb-3">
+            <label for="username" class="form-label">Username</label>
+            <input type="text" class="form-control" id="username" name="username" required>
+        </div>
+        <div class="mb-3">
+            <label for="password" class="form-label">Password</label>
+            <input type="password" class="form-control" id="password" name="password" required>
+        </div>
+        <div class="mb-3">
+            <label for="displayName" class="form-label">Display Name</label>
+            <input type="text" class="form-control" id="displayName" name="displayName">
+        </div>
+        <div class="mb-3">
+            <label for="title" class="form-label">Title</label>
+            <input type="text" class="form-control" id="title" name="title">
+        </div>
+        <button id="createUserButton" class="btn btn-primary">Create User</button>
+    </div>
+    <div id="message" class="mt-3"></div>
 </div>
+
+<signal key="createUserScript" type="script">
+document.getElementById("createUserButton").addEventListener("click", async () => {
+    const data = {
+        username: document.getElementById("username").value,
+        password: document.getElementById("password").value,
+        displayName: document.getElementById("displayName").value,
+        title: document.getElementById("title").value,
+    };
+
+    console.log("Sending data:", data); // Debug
+
+    const messageDiv = document.getElementById("message");
+
+    try {
+        const response = await fetch("/api/authorized/createUser", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+                "x-bearer": sessionStorage.getItem("token")
+            },
+            body: JSON.stringify(data),
+        });
+
+        const result = await response.json();
+        console.log("API Response:", result); // Debug
+
+        if (response.ok) {
+            messageDiv.innerHTML = `<div class="alert alert-success">${result.message}</div>`;
+        } else {
+            messageDiv.innerHTML = `<div class="alert alert-danger">${result.message}</div>`;
+        }
+    } catch (err) {
+        console.error("Error creating user:", err);
+        messageDiv.innerHTML = `<div class="alert alert-danger">An error occurred while creating the user.</div>`;
+    }
+
+    // Clear input fields after a response
+    document.getElementById("username").value = '';
+    document.getElementById("password").value = '';
+    document.getElementById("displayName").value = '';
+    document.getElementById("title").value = '';
+});
+</signal>
