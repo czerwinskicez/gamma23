@@ -1,5 +1,35 @@
 <div class="container">
     <div class="mt-4">
         <h2>Manage permissions</h2>
+
+        <div class="permissionsDisplay"></div>
     </div>
 </div>
+
+<script signal key="getAllPermissions">
+    setTimeout(async _=>{
+        try {
+            const response = await fetch("/api/authorized/getPermissions", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                    "x-bearer": sessionStorage.getItem("token")
+                }
+            });
+
+            const result = await response.json();
+            console.log("API Response (permissions):", result);
+
+            // [
+            //     "read",
+            //     "write",
+            //     "delete",
+            //     "dashboard",
+            //     "view_dashboard"
+            // ]
+
+        } catch(err) {
+            console.error(err);
+        }
+    });
+</script>

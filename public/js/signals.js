@@ -46,6 +46,21 @@ _Signals.signalClock = _Signals.signalClock || setInterval(_=>{
     });
 }, 10);
 
+_Signals.scriptClock = _Signals.scriptClock || setInterval(_=>{
+    document.querySelectorAll("script[signal]:not([dispatched='true'])").forEach(scriptSignal=>{
+        // // console.log(scriptSignal.innerText);
+        // scriptSignal.setAttribute("dispatched", "true");
+
+        // const newSignalElement = document.createElement("signal");
+        // newSignalElement.innerHTML=scriptSignal.innerText;
+        // console.log(newSignalElement);
+        const scriptElement = document.createElement("script");
+        scriptElement.textContent = scriptSignal.textContent;
+        scriptSignal.setAttribute('dispatched', 'true')
+        document.body.appendChild(scriptElement);
+    });
+}, 200);
+
 try {
     const objectToSerialize = JSON.parse(document.querySelector("signal[type='object']").innerHTML);
     Object.keys(objectToSerialize).forEach(objectToSerializeKey=>{

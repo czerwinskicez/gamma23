@@ -146,6 +146,7 @@ app.post(
     console.log(`Action: ${action}`); // Debug
     console.log(`Request Body:`, req.body); // Debug
 
+    // create user
     if (action === "createUser") {
       const { username, password, emailAddress, displayName, title, permissions } = req.body;
 
@@ -157,15 +158,11 @@ app.post(
         const hashedPassword = await bcrypt.hash(password, 10);
         const userId = await userModule.addUser({ username, password: hashedPassword, emailAddress, displayName, title });
 
-        // Assign permissions to the user
         if (permissions && Array.isArray(permissions)) {
           for (const perm of permissions) {
             await userModule.addUserPermission(userId, perm);
           }
         }
-
-        // Optionally, assign all permissions if the user is an admin
-        // You can include an 'isAdmin' flag in the request body if needed
 
         return res.json({ message: "User created successfully." });
       } catch (err) {
@@ -173,6 +170,8 @@ app.post(
         return res.status(500).json({ message: "Internal server error." });
       }
     }
+
+    // get all users
     if (action == "getAllUsers") {
       try {
         const allUsersData = await userModule.getAllUsers();
@@ -182,9 +181,24 @@ app.post(
           usersData: allUsersData,
         });
       } catch (err) {
+        console.error("Error fetching users:", err);
         return res.status(500).json({ message: "Something went wrong while fetching users."});
       }
+    }
 
+    // get permissions
+    if (action == "getPermissions") {
+      try {
+        const allPermissions = await permissionModule.getAllPermissions();
+        return res.json({ 
+          message: "Permissions fetched successfully.",
+          statuts: "OK",
+          permissionsData: allPermissions,
+        });
+      } catch (err) {
+        console.error("Error fetching permissions:", err);
+        return res.status(500).json({ message: "Something went wrong while fetching permissions."});
+      }
     }
 
     return res.status(400).json({ message: `Action '${action}' is not supported.` });
