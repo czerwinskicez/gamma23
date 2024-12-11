@@ -1,3 +1,5 @@
+// core/initUsers.js
+
 const bcrypt = require('bcrypt');
 const { v4: uuidv4 } = require('uuid');
 const db = require('./database'); // Ensure database.js exports the db object
@@ -12,7 +14,6 @@ const initializeUsers = () => {
                     id INTEGER PRIMARY KEY AUTOINCREMENT,
                     username TEXT UNIQUE NOT NULL,
                     password TEXT NOT NULL,
-                    email_address TEXT,
                     display_name TEXT,
                     title TEXT,
                     is_admin BOOLEAN DEFAULT false
@@ -130,17 +131,26 @@ const closeDatabase = () => {
 
 // Add a permission to a user
 const addUserPermission = (userId, action) => {
-    return new Promise((resolve, reject) => {
-        db.get(`SELECT id FROM permissions WHERE action = ?`, [action], (err, row) => {
-            if (err) return reject(err);
+    return new Promise(async (resolve, reject) => {
+        try {
+            const row = await new Promise((res, rej) => {
+                db.get(`SELECT id FROM permissions WHERE action = ?`, [action], (err, row) => {
+                    if (err) return rej(err);
+                    res(row);
+                });
+            });
+
             if (!row) return reject(new Error(`Permission '${action}' does not exist`));
-            
+
             const permissionId = row.id;
+
             db.run(`INSERT INTO user_permissions (user_id, permission_id) VALUES (?, ?)`, [userId, permissionId], (err) => {
                 if (err) return reject(err);
                 resolve();
             });
-        });
+        } catch (err) {
+            reject(err);
+        }
     });
 };
 
@@ -158,21 +168,33 @@ const getUserPermissions = (userId) => {
     });
 };
 
+// Add a new user and return the user ID, then assign 'dashboard' permission
 const addUser = ({ username, password, emailAddress, displayName, title }) => {
     return new Promise((resolve, reject) => {
         db.run(
             `INSERT INTO users (username, password, email_address, display_name, title) VALUES (?, ?, ?, ?, ?)`,
             [username, password, emailAddress, displayName, title],
-            (err) => {
+            async function (err) { // Make the callback async to use await
                 if (err) {
                     console.error("DB Error creating user:", err.message);
                     return reject(new Error(`Error creating user: ${err.message}`));
                 }
-                resolve();
+                const userId = this.lastID;
+                try {
+                    // Assign 'dashboard' permission to the new user
+                    await addUserPermission(userId, 'dashboard');
+                    await addUserPermission(userId, 'view_dashboard');
+                    console.log(`'dashboard' permission assigned to user ID ${userId}.`);
+                    resolve(userId); // Return the ID of the newly created user
+                } catch (permissionErr) {
+                    console.error(`Error assigning 'dashboard' permission to user ID ${userId}:`, permissionErr.message);
+                    return reject(new Error(`User created, but failed to assign 'dashboard' permission: ${permissionErr.message}`));
+                }
             }
         );
     });
 };
+
 
 module.exports = {
     initializeUsers,

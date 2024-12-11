@@ -1,3 +1,4 @@
+// core/initPermissions.js
 const db = require('./database');
 
 // Initialize permissions table and seed initial permissions
@@ -7,8 +8,13 @@ const initializePermissions = async () => {
         const count = await getPermissionsCount();
 
         if (count === 0) {
-            // You can add 'createUser' here if you want users who are not admin to have that permission
-            const initialPermissions = ['read', 'write', 'delete'];
+            // Add all necessary permissions here
+            const initialPermissions = [
+                'createUser',
+                'view_adminDashboard',
+                'view_reports',
+                // Add more permissions as needed
+            ];
             await seedPermissions(initialPermissions);
             console.log("Permissions table initialized with default actions:", initialPermissions);
         } else {
