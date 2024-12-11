@@ -8,7 +8,7 @@ let _Signals = window._Signals || {};
 
 _Signals.updateElementsValues = _ => {
     Object.keys(Signals).forEach(signalKey=>{
-        document.querySelectorAll("[signal-key]").forEach(signalElement=>{
+        document.querySelectorAll(`[signal-key=${signalKey}]`).forEach(signalElement=>{
             signalElement.innerHTML = Signals[signalKey]
         })
     })
@@ -42,5 +42,16 @@ _Signals.signalClock = _Signals.signalClock || setInterval(_=>{
     document.querySelectorAll("signal:not([dispatched])").forEach(signalToDispatch=>{
         Signals[signalToDispatch.getAttribute("key")]=signalToDispatch.innerHTML;
         signalToDispatch.setAttribute("dispatched", "true");
+
     });
 }, 10);
+
+try {
+    const objectToSerialize = JSON.parse(document.querySelector("signal[type='object']").innerHTML);
+    Object.keys(objectToSerialize).forEach(objectToSerializeKey=>{
+        const newSignalElement = document.createElement("signal");
+        newSignalElement.setAttribute("key", objectToSerializeKey);
+        newSignalElement.innerHTML = objectToSerialize[objectToSerializeKey];
+        document.body.append(newSignalElement);
+    });
+} catch (_) { false; }

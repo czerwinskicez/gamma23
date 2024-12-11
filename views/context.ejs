@@ -58,9 +58,9 @@
       <ul class="list-group">
         <a href="#" class="list-group-item list-group-item-action sidebar-user" context-button="manageAccount">
           <div class="d-flex w-100 justify-content-between">
-            <h5 class='mb-1' signal-key="username"></h5>
+            <h5 class='mb-1' signal-key="displayName"></h5>
           </div>
-          <p class="mb-1">System Administrator</p>
+          <p class="mb-1" signal-key="title">System Administrator</p>
           <small class="sidenav-manage-account">Manage account</small>
         </a>
       </ul>
@@ -80,7 +80,10 @@
       <ul class="list-group">
         <a href="#" class="list-group-item list-group-item-action" context-button="manageUsers">Manage users</a>
         <a href="#" class="list-group-item list-group-item-action" context-button="userPermissions">User permissions</a>
+      </ul>
+      <ul class="list-group">
         <a href="#" class="list-group-item list-group-item-action" context-button="manageInstances">Manage instances</a>
+        <a href="#" class="list-group-item list-group-item-action" context-button="manageInstances">View logs</a>
       </ul>
       <ul class="list-group">
         <a href="#" class="list-group-item list-group-item-action" context-button="localUserSettings">Local user settings</a>
@@ -92,6 +95,7 @@
     </div>
   </div>
 </div>
+
 
 <script>
   document.querySelectorAll("[context-button]").forEach(contextButton=>{

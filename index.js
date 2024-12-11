@@ -4,6 +4,7 @@ const express = require('express');
 const path = require('path');
 const bcrypt = require('bcrypt');
 
+const beautifyConsole = require("./core/consolePrefixes");
 const initializeConsoleMessagesTable = require('./core/initDatabase');
 const overrideConsoleMethods = require('./core/consoleLogging');
 const userModule = require('./core/initUsers');
@@ -95,7 +96,7 @@ async function verifyTokenMiddleware(req, res, next) {
             return res.status(403).json({ message: 'Invalid token: user does not exist' });
         }
 
-        req.user = { id: user.id, username: user.username };
+        req.user = { id: user.id, username: user.username, displayName: user.display_name, title: user.title, isAdmin: user.is_admin};
         req.token = token; // Attach token to request for logout
         next();
     } catch (err) {
@@ -105,11 +106,15 @@ async function verifyTokenMiddleware(req, res, next) {
 }
 
 // API endpoint to fetch protected dashboard data
-// app.get('/api/dashboard-data', verifyTokenMiddleware, (req, res) => {
-//     res.json({ message: `Welcome, ${req.user.username}!` });
-// });
 app.get('/api/dashboard-data/:panelContext', verifyTokenMiddleware, (req, res) => {
-  res.render(`panel/${req.params.panelContext}`, { username: req.user.username });
+  try{
+    res.render(`panel/${req.params.panelContext}`, req.user);
+  } catch (err) {
+    res.render(`panel/error.ejs`, {
+      username: req.user.username,
+      errorMessage: err,
+    });
+  }
 });
 
 // Render the dashboard page

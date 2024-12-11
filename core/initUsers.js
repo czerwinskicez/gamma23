@@ -12,7 +12,10 @@ const initializeUsers = () => {
                 CREATE TABLE IF NOT EXISTS users (
                     id INTEGER PRIMARY KEY AUTOINCREMENT,
                     username TEXT UNIQUE NOT NULL,
-                    password TEXT NOT NULL
+                    password TEXT NOT NULL,
+                    display_name TEXT,
+                    title TEXT,
+                    is_admin BOOLEAN DEFAULT false
                 )
             `, async (err) => {
                 if (err) return reject(err);
@@ -22,7 +25,7 @@ const initializeUsers = () => {
                     if (row.count === 0) {
                         // No users, create default root user
                         const hashedPassword = await bcrypt.hash(process.env.INITIAL_ROOT_PASSWORD, 10);
-                        db.run(`INSERT INTO users (username, password) VALUES (?, ?)`, ['root', hashedPassword], (err) => {
+                        db.run(`INSERT INTO users (username, password, is_admin) VALUES (?, ?, true)`, ['root', hashedPassword], (err) => {
                             if (err) return reject(err);
                             console.log("Root user created with username 'root' and password 'root'.");
                             resolve();
