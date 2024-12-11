@@ -12,6 +12,10 @@
             <input type="password" class="form-control" id="password" name="password" required>
         </div>
         <div class="mb-3">
+            <label for="emailAddress" class="form-label">Email address</label>
+            <input type="text" class="form-control" id="emailAddress" name="emailAddress">
+        </div>
+        <div class="mb-3">
             <label for="displayName" class="form-label">Display Name</label>
             <input type="text" class="form-control" id="displayName" name="displayName">
         </div>
@@ -30,6 +34,7 @@ document.getElementById("createUserButton").addEventListener("click", async () =
         username: document.getElementById("username").value,
         password: document.getElementById("password").value,
         displayName: document.getElementById("displayName").value,
+        emailAddress: document.getElementById("emailAddress").value,
         title: document.getElementById("title").value,
     };
 
@@ -63,6 +68,7 @@ document.getElementById("createUserButton").addEventListener("click", async () =
     // Clear input fields after a response
     document.getElementById("username").value = '';
     document.getElementById("password").value = '';
+    document.getElementById("emailAddress").value = '';
     document.getElementById("displayName").value = '';
     document.getElementById("title").value = '';
 });

@@ -104,21 +104,18 @@ async function verifyPermission(req, res, next) {
 // Middleware to verify token using 'x-bearer' header
 async function verifyTokenMiddleware(req, res, next) {
   const bearerHeader = req.headers['x-bearer'];
-  console.log("Token received:", bearerHeader); // Debug
 
   if (!bearerHeader) return res.status(401).json({ message: 'No token provided' });
   const token = bearerHeader;
 
   try {
       const tokenData = await userModule.verifyToken(token);
-      console.log("Token Data:", tokenData); // Debug
 
       if (!tokenData) {
           return res.status(403).json({ message: 'Invalid or expired token' });
       }
 
       const user = await userModule.getUserById(tokenData.user_id);
-      console.log("User Data:", user); // Debug
 
       if (!user) {
           return res.status(403).json({ message: 'Invalid token: user does not exist' });
@@ -145,7 +142,7 @@ app.post('/api/authorized/:action', verifyTokenMiddleware, verifyPermission, asy
   console.log(`Request Body:`, req.body); // Debug
 
   if (action === "createUser") {
-      const { username, password, displayName, title } = req.body;
+      const { username, password, emailAddress, displayName, title } = req.body;
 
       if (!username || !password) {
         return res.status(400).json({ message: "Username and password are required." });
@@ -153,7 +150,7 @@ app.post('/api/authorized/:action', verifyTokenMiddleware, verifyPermission, asy
 
       try {
           const hashedPassword = await bcrypt.hash(password, 10);
-          await userModule.addUser({ username, password: hashedPassword, displayName, title });
+          await userModule.addUser({ username, password: hashedPassword, emailAddress, displayName, title });
           return res.json({ message: "User created successfully." });
       } catch (err) {
           console.error("Error creating user:", err);

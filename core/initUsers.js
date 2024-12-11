@@ -12,6 +12,7 @@ const initializeUsers = () => {
                     id INTEGER PRIMARY KEY AUTOINCREMENT,
                     username TEXT UNIQUE NOT NULL,
                     password TEXT NOT NULL,
+                    email_address TEXT,
                     display_name TEXT,
                     title TEXT,
                     is_admin BOOLEAN DEFAULT false
@@ -157,11 +158,11 @@ const getUserPermissions = (userId) => {
     });
 };
 
-const addUser = ({ username, password, displayName, title }) => {
+const addUser = ({ username, password, emailAddress, displayName, title }) => {
     return new Promise((resolve, reject) => {
         db.run(
-            `INSERT INTO users (username, password, display_name, title) VALUES (?, ?, ?, ?)`,
-            [username, password, displayName, title],
+            `INSERT INTO users (username, password, email_address, display_name, title) VALUES (?, ?, ?, ?, ?)`,
+            [username, password, emailAddress, displayName, title],
             (err) => {
                 if (err) {
                     console.error("DB Error creating user:", err.message);
