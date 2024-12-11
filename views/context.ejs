@@ -26,6 +26,16 @@
   }
   #dashboard-content{
     min-height: 100%;
+    display: grid;
+  }
+  #dashboard-content:has(.preloader){
+    display: grid;
+    align-items: center;
+    text-align: center;
+  }
+  #dashboard-content .preloader .spinner-border{
+    width: 5rem;
+    height: 5rem;
   }
 </style>
 
@@ -93,6 +103,14 @@
   const fetchContext = (contextToFetch) => {
     const dashboardContent = document.getElementById('dashboard-content');
     const token = sessionStorage.getItem('token');
+
+    dashboardContent.innerHTML = `
+      <div class="justify-content-center preloader">
+        <div class="spinner-border text-primary" role="status">
+          <span class="visually-hidden">Loading...</span>
+        </div>
+      </div>
+    `;
 
     // Fetch the authenticated context content
     fetch(`/api/dashboard-data/${contextToFetch}`, {

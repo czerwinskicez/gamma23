@@ -8,7 +8,7 @@
     .login-page{
       display: grid;
       align-items: center;
-      height: 90dvh;
+      height: 90vh; /* Corrected from 90dvh to 90vh */
     }
     .login-card{
       margin-top: 40px;
@@ -33,6 +33,10 @@
       color: red;
       margin-top: 10px;
     }
+    .login-card #login-button{
+      margin-left: auto;
+      margin-right: auto;
+    }
   </style>
 </head>
 <body>
@@ -51,7 +55,11 @@
                           <div class="input-group">
                               <input type="password" class="form-control" id="password" placeholder="Password">
                           </div>
-                          <button class="btn btn-primary btn-lg">Login</button>
+                          <!-- Updated Login Button with Spinner -->
+                          <button class="btn btn-primary btn-lg d-flex align-items-center justify-content-center" id="login-button">
+                            <span class="spinner-border spinner-border-sm me-2 d-none" id="login-spinner" role="status" aria-hidden="true"></span>
+                            <span id="login-text">Login</span>
+                          </button>
                           <div id="message-box"></div>
                       </div>
                   </div>
@@ -61,9 +69,13 @@
       </div>
   </div>
 
+  <!-- Your existing Bootstrap JS is assumed to be included elsewhere -->
+
   <script>
     document.addEventListener('DOMContentLoaded', () => {
-      const loginButton = document.querySelector('.credentials-box button');
+      const loginButton = document.getElementById('login-button');
+      const loginSpinner = document.getElementById('login-spinner');
+      const loginText = document.getElementById('login-text');
       const usernameInput = document.getElementById('login');
       const passwordInput = document.getElementById('password');
       const messageBox = document.getElementById('message-box');
@@ -79,6 +91,11 @@
           displayMessage('Please enter both username and password.');
           return;
         }
+
+        // Disable the button and show the spinner
+        loginButton.disabled = true;
+        loginSpinner.classList.remove('d-none');
+        loginText.textContent = 'Logging in...';
 
         try {
           const response = await fetch('/api/login', {
@@ -97,10 +114,16 @@
             window.location.href = '/dashboard';
           } else {
             displayMessage(data.message || 'Login failed');
+            
+            // Re-enable the button and hide the spinner
+            loginButton.disabled = false;
+            loginSpinner.classList.add('d-none');
+            loginText.textContent = 'Login';
           }
         } catch (error) {
           console.error('Error during login:', error);
           displayMessage('An error occurred. Please try again.');
+        } finally {
         }
       });
 
