@@ -1,13 +1,33 @@
 <div class="container">
     <div class="mt-4">
-        <h2>Manage permissions</h2>
+        <h2>Manage Permissions</h2>
+    </div>
 
-        <div class="permissionsDisplay"></div>
+    <div class="mt-4">
+        <div class="row">
+            <!-- Permissions Display Section -->
+            <div class="col-xs-12 col-md-6">
+                <div class="permissionsDisplay"></div>
+            </div>
+            
+            <!-- Create Permission Section -->
+            <div class="col-xs-12 col-md-6">
+                <div class="mb-3">
+                    <h4>Create Permission</h4>
+                    <div class="mb-3">
+                        <label for="newPermissionAction" class="form-label">Permission Action</label>
+                        <input type="text" class="form-control" id="newPermissionAction" required>
+                    </div>
+                    <button id="createPermissionButton" class="btn btn-primary">Create Permission</button>
+                    <div id="createPermissionMessage" class="mt-3"></div>
+                </div>
+            </div>
+        </div>
     </div>
 </div>
 
 <script signal key="getAllPermissions">
-    setTimeout(async _=>{
+    setTimeout(async _ => {
         try {
             const response = await fetch("/api/authorized/getPermissions", {
                 method: "POST",
@@ -20,16 +40,113 @@
             const result = await response.json();
             console.log("API Response (permissions):", result);
 
-            // [
-            //     "read",
-            //     "write",
-            //     "delete",
-            //     "dashboard",
-            //     "view_dashboard"
-            // ]
+            // Check if the permissionsData exists and is an array
+            if (result.permissionsData && Array.isArray(result.permissionsData)) {
+                // Build the table
+                const tableHTML = `
+                    <table class="table table-striped">
+                        <thead>
+                            <tr>
+                                <th scope="col">ID</th>
+                                <th scope="col">Action</th>
+                                <th scope="col">Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            ${result.permissionsData.map(permission => {
+                                return `
+                                    <tr>
+                                        <td>${permission.id}</td>
+                                        <td>${permission.action}</td>
+                                        <td>
+                                            <button class="btn btn-danger deletePermissionBtn" data-id="${permission.id}">Delete</button>
+                                        </td>
+                                    </tr>
+                                `;
+                            }).join('')}
+                        </tbody>
+                    </table>
+                `;
 
-        } catch(err) {
+                // Insert the table HTML into the .permissionsDisplay element
+                document.querySelector('.permissionsDisplay').innerHTML = tableHTML;
+
+                // Add event listeners to delete buttons
+                document.querySelectorAll('.deletePermissionBtn').forEach(button => {
+                    button.addEventListener('click', async function() {
+                        const permissionId = button.getAttribute('data-id');
+                        try {
+                            const deleteResponse = await fetch("/api/authorized/deletePermission", {
+                                method: "POST",
+                                headers: {
+                                    "Content-Type": "application/json",
+                                    "x-bearer": sessionStorage.getItem("token")
+                                },
+                                body: JSON.stringify({ id: permissionId })
+                            });
+
+                            const deleteResult = await deleteResponse.json();
+                            console.log("Delete Response:", deleteResult);
+
+                            if (deleteResponse.ok) {
+                                alert(`Permission with ID ${permissionId} deleted successfully.`);
+                                // Refresh the permissions list
+                                window.location.reload();
+                            } else {
+                                alert(deleteResult.message || 'Error deleting permission.');
+                            }
+                        } catch (err) {
+                            console.error(err);
+                            alert('An error occurred while deleting the permission.');
+                        }
+                    });
+                });
+            } else {
+                document.querySelector('.permissionsDisplay').innerHTML = '<div>No permissions found.</div>';
+            }
+        } catch (err) {
             console.error(err);
+            document.querySelector('.permissionsDisplay').innerHTML = '<div>Error loading permissions.</div>';
+        }
+    });
+</script>
+
+<script signal key="createPermissionScript">
+    // Handle the Create Permission functionality with JS
+    document.getElementById('createPermissionButton').addEventListener('click', async () => {
+        const newPermissionAction = document.getElementById("newPermissionAction").value;
+        const createMessageDiv = document.getElementById("createPermissionMessage");
+
+        if (!newPermissionAction) {
+            createMessageDiv.innerHTML = `<div class="alert alert-warning">Permission Action is required.</div>`;
+            return;
+        }
+
+        try {
+            const response = await fetch("/api/authorized/createPermission", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                    "x-bearer": sessionStorage.getItem("token")
+                },
+                body: JSON.stringify({ action: newPermissionAction })
+            });
+
+            const result = await response.json();
+            console.log("Create Permission Response:", result);
+
+            if (response.ok) {
+                createMessageDiv.innerHTML = `<div class="alert alert-success">${result.message}</div>`;
+                // Clear the input field
+                document.getElementById("newPermissionAction").value = '';
+                // Refresh the permissions list
+                window.location.reload();
+            } else {
+                createMessageDiv.innerHTML = `<div class="alert alert-danger">${result.message || 'Error creating permission.'}</div>`;
+            }
+        } catch (err) {
+            console.error(err);
+            createMessageDiv.innerHTML = `<div class="alert alert-danger">An error occurred while creating the permission.</div>`;
         }
     });
 </script>

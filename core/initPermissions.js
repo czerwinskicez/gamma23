@@ -89,12 +89,13 @@ const getPermissions = () => {
 // Get all available permissions
 const getAllPermissions = () => {
     return new Promise((resolve, reject) => {
-        db.all(`SELECT action FROM permissions`, [], (err, rows) => {
+        db.all(`SELECT * FROM permissions`, [], (err, rows) => {
             if (err) return reject(new Error(`Error fetching all permissions: ${err.message}`));
-            resolve(rows.map(row => row.action)); // Extract action from each row
+            resolve(rows); // Return the entire row, which includes both 'id' and 'action'
         });
     });
 };
+
 
 module.exports = {
     initializePermissions,

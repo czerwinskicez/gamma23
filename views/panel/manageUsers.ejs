@@ -43,58 +43,15 @@
 
   <div class="mt-5">
     <h3>Users List</h3>
-    <table class="table table-striped table-responsive allUsersDataTable" id="usersTable"></table>
+    <div class="table-responsive">
+      <table class="table table-striped table-sm" id="usersTable">
+        <!-- The table content will be dynamically inserted here -->
+      </table>
+    </div>
   </div>
 </div>
 
-
-<script signal key="createUserScript">
-
-  document.getElementById("createUserButton").addEventListener("click", async () => {
-    const data = {
-      username: document.getElementById("username").value,
-      password: document.getElementById("password").value,
-      displayName: document.getElementById("displayName").value,
-      emailAddress: document.getElementById("emailAddress").value,
-      title: document.getElementById("title").value,
-    };
-
-    console.log("Sending data:", data); // Debug
-
-    const messageDiv = document.getElementById("message");
-
-    try {
-      const response = await fetch("/api/authorized/createUser", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          "x-bearer": sessionStorage.getItem("token")
-        },
-        body: JSON.stringify(data),
-      });
-
-      const result = await response.json();
-      console.log("API Response:", result); // Debug
-
-      if (response.ok) {
-        messageDiv.innerHTML = `<div class="alert alert-success">${result.message}</div>`;
-      } else {
-        messageDiv.innerHTML = `<div class="alert alert-danger">${result.message}</div>`;
-      }
-    } catch (err) {
-      console.error("Error creating user:", err);
-      messageDiv.innerHTML = `<div class="alert alert-danger">An error occurred while creating the user.</div>`;
-    }
-
-    // Clear input fields after a response
-    document.getElementById("username").value = '';
-    document.getElementById("password").value = '';
-    document.getElementById("emailAddress").value = '';
-    document.getElementById("displayName").value = '';
-    document.getElementById("title").value = '';
-  });
-</script>
-<script signal key="getAllUsersScript">
+<script dev signal key="getAllUsersScript">
   setTimeout(async _ => {
     try {
       const response = await fetch("/api/authorized/getAllUsers", {
@@ -108,55 +65,80 @@
       const result = await response.json();
       console.log("API Response (users):", result);
 
+      document.querySelectorAll('.table-responsive').forEach(container => {
+        if (result.usersData && result.usersData.length > 0) {
+          // Create thead
+          const thead = document.createElement('thead');
+          const headerRow = document.createElement('tr');
+          Object.keys(result.usersData[0]).forEach(key => {
+            const headerCell = document.createElement('th');
+            headerCell.textContent = key.charAt(0).toUpperCase() + key.slice(1);
+            headerRow.appendChild(headerCell);
+          });
+          // Add a column for actions
+          const actionHeaderCell = document.createElement('th');
+          actionHeaderCell.textContent = 'Actions';
+          headerRow.appendChild(actionHeaderCell);
+          thead.appendChild(headerRow);
+          container.querySelector('table').appendChild(thead);
 
+          // Create tbody
+          const tbody = document.createElement('tbody');
+          result.usersData.forEach(userData => {
+            const userRowElement = document.createElement('tr');
+            Object.keys(userData).forEach(userObjectKey => {
+              const cell = document.createElement('td');
+              cell.textContent = userData[userObjectKey];
+              userRowElement.appendChild(cell);
+            });
 
+            // Actions dropdown using Bootstrap 5
+            const actionsCell = document.createElement('td');
+            const dropdownDiv = document.createElement('div');
+            dropdownDiv.className = 'dropdown';
 
+            const dropdownButton = document.createElement('button');
+            dropdownButton.className = 'btn btn-secondary dropdown-toggle';
+            dropdownButton.setAttribute('type', 'button');
+            dropdownButton.setAttribute('data-bs-toggle', 'dropdown');
+            dropdownButton.setAttribute('aria-expanded', 'false');
+            dropdownButton.textContent = 'Action';
 
-document.querySelectorAll('.allUsersDataTable').forEach(table => {
-  if (result.usersData && result.usersData.length > 0) {
-    // Create thead
-    const thead = document.createElement('thead');
-    const headerRow = document.createElement('tr');
-    Object.keys(result.usersData[0]).forEach(key => {
-      const headerCell = document.createElement('th');
-      headerCell.textContent = key.charAt(0).toUpperCase() + key.slice(1);
-      headerRow.appendChild(headerCell);
-    });
-    // Add a column for actions
-    const actionHeaderCell = document.createElement('th');
-    actionHeaderCell.textContent = 'Actions';
-    headerRow.appendChild(actionHeaderCell);
-    thead.appendChild(headerRow);
-    table.appendChild(thead);
+            const dropdownMenu = document.createElement('ul');
+            dropdownMenu.className = 'dropdown-menu';
 
-    // Create tbody
-    const tbody = document.createElement('tbody');
-    result.usersData.forEach(userData => {
-      const userRowElement = document.createElement('tr');
-      Object.keys(userData).forEach(userObjectKey => {
-        const cell = document.createElement('td');
-        cell.textContent = userData[userObjectKey];
-        userRowElement.appendChild(cell);
+            // Populate dropdown menu
+            const actions = ['Delete User'];
+            actions.forEach(action => {
+              const actionItem = document.createElement('li');
+              const actionLink = document.createElement('a');
+              actionLink.className = 'dropdown-item';
+              actionLink.href = '#';
+              actionLink.textContent = action;
+              actionLink.addEventListener('click', function(event) {
+                event.preventDefault();
+                alert('Action: ' + action + ' for ' + userData.username); // Implement actual action functionality
+              });
+              actionItem.appendChild(actionLink);
+              dropdownMenu.appendChild(actionItem);
+            });
+
+            dropdownDiv.appendChild(dropdownButton);
+            dropdownDiv.appendChild(dropdownMenu);
+            actionsCell.appendChild(dropdownDiv);
+
+            userRowElement.appendChild(actionsCell);
+            tbody.appendChild(userRowElement);
+          });
+          container.querySelector('table').appendChild(tbody);
+        }
       });
 
-
-      const actionsCell = document.createElement('td');
-      actionsCell.innerHTML = `
-      
-      `;
-      userRowElement.appendChild(actionsCell);
-
-      tbody.appendChild(userRowElement);
-    });
-    table.appendChild(tbody);
-  }
-});
-
-
-
-
-
-
+      // Initialize dropdowns
+      var dropdownElementList = [].slice.call(document.querySelectorAll('.dropdown-toggle'));
+      var dropdownList = dropdownElementList.map(function (dropdownToggleEl) {
+        return new bootstrap.Dropdown(dropdownToggleEl);
+      });
 
     } catch (err) {
       console.error(err);
