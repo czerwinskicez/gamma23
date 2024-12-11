@@ -17,9 +17,9 @@ _Signals.updateElementsValues = _ => {
 _Signals.signalHandler = {
     set: function(obj, prop, value) {
         if (obj.hasOwnProperty(prop)) {
-            console.log(`Property '${prop}' changed from '${obj[prop]}' to '${value}'.`);
+            // console.log(`Property '${prop}' changed from '${obj[prop]}' to '${value}'.`);
         } else {
-            console.log(`Property '${prop}' added with value '${value}'.`);
+            // console.log(`Property '${prop}' added with value '${value}'.`);
         }
         obj[prop] = value; // Perform the actual property assignment
         _Signals.updateElementsValues();
@@ -27,7 +27,7 @@ _Signals.signalHandler = {
     },
     deleteProperty: function(obj, prop) {
         if (obj.hasOwnProperty(prop)) {
-            console.log(`Property '${prop}' deleted.`);
+            // console.log(`Property '${prop}' deleted.`);
             delete obj[prop];
             _Signals.updateElementsValues();
             return true;

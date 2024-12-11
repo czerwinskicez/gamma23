@@ -45,7 +45,6 @@ function verifyPermission(getAction) {
 
     try {
       if (req.user.isAdmin) {
-        console.log("Admin has logged in: ", req.user); // Debug
         return next();
       }
 
@@ -174,6 +173,19 @@ app.post(
         return res.status(500).json({ message: "Internal server error." });
       }
     }
+    if (action == "getAllUsers") {
+      try {
+        const allUsersData = await userModule.getAllUsers();
+        return res.json({ 
+          message: "Users fetched successfully.",
+          statuts: "OK",
+          usersData: allUsersData,
+        });
+      } catch (err) {
+        return res.status(500).json({ message: "Something went wrong while fetching users."});
+      }
+
+    }
 
     return res.status(400).json({ message: `Action '${action}' is not supported.` });
   }
@@ -189,7 +201,13 @@ app.get(
     console.log(`Fetching panel context: ${panelContext}`); // Debug
 
     try {
-      res.render(`panel/${panelContext}`, req.user);
+      // if (panelContext == 'manage-users') {
+      //   const users = await userModule.getAllUsers();
+      //   res.render(`panel/${panelContext}`, { users, user: req.user});
+      // }
+      // else {
+        res.render(`panel/${panelContext}`, req.user);
+      // }
     } catch (err) {
       console.error(`Error rendering panel ${panelContext}:`, err);
       res.status(500).render(`panel/error.ejs`, {

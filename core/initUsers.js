@@ -195,6 +195,19 @@ const addUser = ({ username, password, emailAddress, displayName, title }) => {
     });
 };
 
+const getAllUsers = () => {
+    return new Promise((resolve, reject) => {
+        db.all(
+            `SELECT id, username, email_address, display_name, title, is_admin FROM users`,
+            [],
+            (err, rows) => {
+                if (err) return reject(err);
+                resolve(rows);
+            }
+        );
+    });
+};
+
 
 module.exports = {
     initializeUsers,
@@ -204,6 +217,7 @@ module.exports = {
     verifyToken,
     deleteToken,
     addUser,
+    getAllUsers,
     addUserPermission,
     getUserPermissions,
     closeDatabase
