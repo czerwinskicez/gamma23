@@ -3,11 +3,6 @@
   .username {
     margin-right: 16px;
   }
-  @media (min-width: 768px) {
-    .sidebar-nav{
-      padding-right: 0;
-    }
-  }
   .sidebar-nav .list-group:not(:last-child){
     padding-bottom: 10px;
   }
@@ -58,7 +53,7 @@
 </nav>
 <div class="container-fluid dashboard-content-body dashboard-content-body">
   <div class="row">
-    <div class="col-xs-12 col-md-4 col-lg-3 col-xl-2 sidebar-nav">
+    <div class="col-xs-12 col-lg-3 sidebar-nav">
       <ul class="list-group">
         <a href="#" class="list-group-item list-group-item-action sidebar-user" context-button="manageAccount">
           <div class="d-flex w-100 justify-content-between">
@@ -83,7 +78,6 @@
       </ul>
       <ul class="list-group">
         <a href="#" class="list-group-item list-group-item-action" context-button="manageUsers">Manage users</a>
-        <a href="#" class="list-group-item list-group-item-action" context-button="editUser">Edit user</a>
         <a href="#" class="list-group-item list-group-item-action" context-button="userPermissions">User permissions</a>
       </ul>
       <ul class="list-group">

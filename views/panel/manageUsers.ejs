@@ -4,44 +4,44 @@
   </div>
   <div class="mt-4">
     <div class="row">
-      <div class="col-xs-12 col-md-6">
+      <div class="col-12 col-md-6">
         <div class="mb-3">
           <label for="username" class="form-label">Username</label>
           <input type="text" class="form-control" id="username" name="username" required>
         </div>
       </div>
-      <div class="col-xs-12 col-md-6">
+      <div class="col-12 col-md-6">
         <div class="mb-3">
           <label for="emailAddress" class="form-label">Email address</label>
           <input type="text" class="form-control" id="emailAddress" name="emailAddress">
         </div>
       </div>
-      <div class="col-xs-12 col-md-6">
+      <div class="col-12 col-md-6">
         <div class="mb-3">
           <label for="password" class="form-label">Password</label>
           <input type="password" class="form-control" id="password" name="password" required>
         </div>
       </div>
-      <div class="col-xs-12 col-md-6">
+      <div class="col-12 col-md-6">
         <div class="mb-3">
           <label for="confirmPassword" class="form-label">Confirm Password</label>
           <input type="password" class="form-control" id="confirmPassword" name="confirmPassword" required>
         </div>
       </div>
-      <div class="col-xs-12 col-md-6">
+      <div class="col-12 col-md-6">
         <div class="mb-3">
           <label for="displayName" class="form-label">Display Name</label>
           <input type="text" class="form-control" id="displayName" name="displayName">
         </div>
       </div>
-      <div class="col-xs-12 col-md-6">
+      <div class="col-12 col-md-6">
         <div class="mb-3">
           <label for="title" class="form-label">Title</label>
           <input type="text" class="form-control" id="title" name="title">
         </div>
       </div>
-      <div class="col-xs-12">
-        <button id="createUserButton" class="btn btn-primary">Create User</button>
+      <div class="col-12">
+        <button id="createUserButton" class="btn btn-primary w-100">Create User</button>
       </div>
     </div>
   </div>
@@ -49,120 +49,390 @@
 
   <div class="mt-5">
     <h3>Users List</h3>
-    <table class="table table-striped table-responsive" id="usersTable"></table>
+    <div class="row">
+      <div class="col-xs-12">
+
+        <div class="table-responsive table-hover">
+          <table class="table table-striped table-hover" id="usersTable"></table>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Edit User Modal -->
+<div class="modal fade" id="editUserModal" tabindex="-1" aria-labelledby="editUserModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <form id="editUserForm">
+        <div class="modal-header">
+          <h5 class="modal-title" id="editUserModalLabel">Edit User Details</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <!-- Hidden field for User ID -->
+          <input type="hidden" id="editUserId" name="editUserId">
+
+          <div class="mb-3">
+            <label for="editUsername" class="form-label">Username</label>
+            <input type="text" class="form-control" id="editUsername" name="editUsername" required>
+          </div>
+          <div class="mb-3">
+            <label for="editEmailAddress" class="form-label">Email address</label>
+            <input type="email" class="form-control" id="editEmailAddress" name="editEmailAddress">
+          </div>
+          <div class="mb-3">
+            <label for="editDisplayName" class="form-label">Display Name</label>
+            <input type="text" class="form-control" id="editDisplayName" name="editDisplayName">
+          </div>
+          <div class="mb-3">
+            <label for="editTitle" class="form-label">Title</label>
+            <input type="text" class="form-control" id="editTitle" name="editTitle">
+          </div>
+          <hr>
+          <h5>Reset Password</h5>
+          <div class="mb-3">
+            <label for="editPassword" class="form-label">New Password</label>
+            <input type="password" class="form-control" id="editPassword" name="editPassword">
+          </div>
+          <div class="mb-3">
+            <label for="editConfirmPassword" class="form-label">Confirm New Password</label>
+            <input type="password" class="form-control" id="editConfirmPassword" name="editConfirmPassword">
+          </div>
+          <div id="editMessage" class="mt-2"></div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-danger" id="deleteUserButton">Delete User</button>
+          <button type="submit" class="btn btn-primary">Save Changes</button>
+        </div>
+      </form>
+    </div>
   </div>
 </div>
 
 
+
 <script dev signal key="createUserScript">
 
-document.getElementById("createUserButton").addEventListener("click", async () => {
-  const username = document.getElementById("username").value;
-  const password = document.getElementById("password").value;
-  const confirmPassword = document.getElementById("confirmPassword").value;
-  const displayName = document.getElementById("displayName").value;
-  const emailAddress = document.getElementById("emailAddress").value;
-  const title = document.getElementById("title").value;
-  
-  const messageDiv = document.getElementById("message");
+  document.getElementById("createUserButton").addEventListener("click", async () => {
+    const username = document.getElementById("username").value;
+    const password = document.getElementById("password").value;
+    const confirmPassword = document.getElementById("confirmPassword").value;
+    const displayName = document.getElementById("displayName").value;
+    const emailAddress = document.getElementById("emailAddress").value;
+    const title = document.getElementById("title").value;
 
-  // Validation
-  if (!username || !password || !confirmPassword) {
-    messageDiv.innerHTML = `<div class="alert alert-warning">All fields are required.</div>`;
-    return;
-  }
+    const messageDiv = document.getElementById("message");
 
-  if (password !== confirmPassword) {
-    messageDiv.innerHTML = `<div class="alert alert-warning">Passwords do not match.</div>`;
-    return;
-  }
-
-  try {
-    const data = {
-      username,
-      password,
-      displayName,
-      emailAddress,
-      title
-    };
-
-    const response = await fetch("/api/authorized/createUser", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        "x-bearer": sessionStorage.getItem("token")
-      },
-      body: JSON.stringify(data),
-    });
-
-    const result = await response.json();
-    console.log("API Response:", result); // Debug
-
-    if (response.ok) {
-      messageDiv.innerHTML = `<div class="alert alert-success">${result.message}</div>`;
-    } else {
-      messageDiv.innerHTML = `<div class="alert alert-danger">${result.message}</div>`;
+    // Validation
+    if (!username || !password || !confirmPassword) {
+      messageDiv.innerHTML = `<div class="alert alert-warning">All fields are required.</div>`;
+      return;
     }
-  } catch (err) {
-    console.error("Error creating user:", err);
-    messageDiv.innerHTML = `<div class="alert alert-danger">An error occurred while creating the user.</div>`;
-  }
 
-  // Clear input fields after a response
-  document.getElementById("username").value = '';
-  document.getElementById("password").value = '';
-  document.getElementById("confirmPassword").value = '';
-  document.getElementById("emailAddress").value = '';
-  document.getElementById("displayName").value = '';
-  document.getElementById("title").value = '';
-});
+    if (password !== confirmPassword) {
+      messageDiv.innerHTML = `<div class="alert alert-warning">Passwords do not match.</div>`;
+      return;
+    }
+
+    try {
+      const data = {
+        username,
+        password,
+        displayName,
+        emailAddress,
+        title
+      };
+
+      const response = await fetch("/api/authorized/createUser", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          "x-bearer": sessionStorage.getItem("token")
+        },
+        body: JSON.stringify(data),
+      });
+
+      const result = await response.json();
+      console.log("API Response:", result); // Debug
+
+      if (response.ok) {
+        messageDiv.innerHTML = `<div class="alert alert-success">${result.message}</div>`;
+      } else {
+        messageDiv.innerHTML = `<div class="alert alert-danger">${result.message}</div>`;
+      }
+    } catch (err) {
+      console.error("Error creating user:", err);
+      messageDiv.innerHTML = `<div class="alert alert-danger">An error occurred while creating the user.</div>`;
+    }
+
+    // Clear input fields after a response
+    document.getElementById("username").value = '';
+    document.getElementById("password").value = '';
+    document.getElementById("confirmPassword").value = '';
+    document.getElementById("emailAddress").value = '';
+    document.getElementById("displayName").value = '';
+    document.getElementById("title").value = '';
+  });
 
 </script>
 <script dev signal key="getAllUsersScript">
-  setTimeout(async _=>{
+setTimeout(async () => {
+  try {
+    const response = await fetch("/api/authorized/getAllUsers", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        "x-bearer": sessionStorage.getItem("token"),
+      },
+    });
+
+    const result = await response.json();
+    console.log("API Response (users):", result);
+
+    const table = document.getElementById("usersTable");
+    table.innerHTML = ""; // Clear the table before populating
+
+    if (result.usersData && result.usersData.length > 0) {
+      // Create thead
+      const thead = document.createElement("thead");
+      const headerRow = document.createElement("tr");
+
+      // Add table headers
+      Object.keys(result.usersData[0]).forEach((key) => {
+        const headerCell = document.createElement("th");
+        headerCell.textContent = key.charAt(0).toUpperCase() + key.slice(1);
+        headerRow.appendChild(headerCell);
+      });
+
+      // Add "Action" column to the header
+      const actionHeaderCell = document.createElement("th");
+      actionHeaderCell.textContent = "Action";
+      headerRow.appendChild(actionHeaderCell);
+
+      thead.appendChild(headerRow);
+      table.appendChild(thead);
+
+      // Create tbody
+      const tbody = document.createElement("tbody");
+
+// Inside the getAllUsersScript
+result.usersData.forEach(userData => {
+  const userRowElement = document.createElement('tr');
+
+  Object.keys(userData).forEach(userObjectKey => {
+    const cell = document.createElement('td');
+    cell.textContent = userData[userObjectKey];
+    userRowElement.appendChild(cell);
+  });
+
+  const actionCell = document.createElement('td');
+  const detailsButton = document.createElement('button');
+  detailsButton.className = 'btn btn-link';
+  detailsButton.textContent = 'Details';
+  detailsButton.addEventListener('click', () => openEditUserModal(userData));
+  actionCell.appendChild(detailsButton);
+  userRowElement.appendChild(actionCell);
+
+  tbody.appendChild(userRowElement);
+});
+
+
+
+      table.appendChild(tbody);
+    } else {
+      table.innerHTML = `<tr><td colspan="100%">No users found.</td></tr>`;
+    }
+  } catch (err) {
+    console.error("Error fetching users:", err);
+  }
+});
+
+</script>
+<script dev signal key="editUserScript">
+  // Function to open the edit user modal and populate it with user data
+  function openEditUserModal(userData) {
+    // Populate the modal fields with user data
+    document.getElementById('editUserId').value = userData.id;
+    document.getElementById('editUsername').value = userData.username || '';
+    document.getElementById('editEmailAddress').value = userData.email_address || '';
+    document.getElementById('editDisplayName').value = userData.display_name || '';
+    document.getElementById('editTitle').value = userData.title || '';
+    document.getElementById('editPassword').value = '';
+    document.getElementById('editConfirmPassword').value = '';
+    document.getElementById('editMessage').innerHTML = '';
+
+    // Show the modal
+    const editUserModal = new bootstrap.Modal(document.getElementById('editUserModal'));
+    editUserModal.show();
+  }
+
+  // Handle form submission for editing user details
+  document.getElementById('editUserForm').addEventListener('submit', async (e) => {
+    e.preventDefault();
+
+    const userId = document.getElementById('editUserId').value;
+    const username = document.getElementById('editUsername').value;
+    const emailAddress = document.getElementById('editEmailAddress').value;
+    const displayName = document.getElementById('editDisplayName').value;
+    const title = document.getElementById('editTitle').value;
+    const password = document.getElementById('editPassword').value;
+    const confirmPassword = document.getElementById('editConfirmPassword').value;
+
+    const editMessageDiv = document.getElementById('editMessage');
+
+    // Validation
+    if (!username) {
+      editMessageDiv.innerHTML = `<div class="alert alert-warning">Username is required.</div>`;
+      return;
+    }
+
+    if (password || confirmPassword) {
+      if (password !== confirmPassword) {
+        editMessageDiv.innerHTML = `<div class="alert alert-warning">Passwords do not match.</div>`;
+        return;
+      }
+    }
+
+    try {
+      const data = {
+        id: userId,
+        username,
+        emailAddress,
+        displayName,
+        title,
+        ...(password && { password }) // Include password only if it's provided
+      };
+
+      const response = await fetch("/api/authorized/updateUser", {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+          "x-bearer": sessionStorage.getItem("token")
+        },
+        body: JSON.stringify(data),
+      });
+
+      const result = await response.json();
+      console.log("API Response (update):", result); // Debug
+
+      if (response.ok) {
+        editMessageDiv.innerHTML = `<div class="alert alert-success">${result.message}</div>`;
+        // Optionally, refresh the users list
+        refreshUsersList();
+      } else {
+        editMessageDiv.innerHTML = `<div class="alert alert-danger">${result.message}</div>`;
+      }
+    } catch (err) {
+      console.error("Error updating user:", err);
+      editMessageDiv.innerHTML = `<div class="alert alert-danger">An error occurred while updating the user.</div>`;
+    }
+  });
+
+  // Handle delete user button click
+  document.getElementById('deleteUserButton').addEventListener('click', async () => {
+    const userId = document.getElementById('editUserId').value;
+    const confirmation = confirm("Are you sure you want to delete this user?");
+    if (!confirmation) return;
+
+    try {
+      const response = await fetch(`/api/authorized/deleteUser/${userId}`, {
+        method: "DELETE",
+        headers: {
+          "Content-Type": "application/json",
+          "x-bearer": sessionStorage.getItem("token")
+        },
+      });
+
+      const result = await response.json();
+      console.log("API Response (delete):", result); // Debug
+
+      if (response.ok) {
+        // Hide the modal
+        const editUserModalEl = document.getElementById('editUserModal');
+        const editUserModal = bootstrap.Modal.getInstance(editUserModalEl);
+        editUserModal.hide();
+
+        // Optionally, refresh the users list
+        refreshUsersList();
+      } else {
+        alert(`Error: ${result.message}`);
+      }
+    } catch (err) {
+      console.error("Error deleting user:", err);
+      alert("An error occurred while deleting the user.");
+    }
+  });
+
+  // Function to refresh the users list
+  async function refreshUsersList() {
     try {
       const response = await fetch("/api/authorized/getAllUsers", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
-          "x-bearer": sessionStorage.getItem("token")
-        }
+          "x-bearer": sessionStorage.getItem("token"),
+        },
       });
 
       const result = await response.json();
       console.log("API Response (users):", result);
 
-      const table = document.getElementById('usersTable');
-  
-      // Assuming result.usersData is available here; otherwise, this part needs adjustment.
+      const table = document.getElementById("usersTable");
+      table.innerHTML = ""; // Clear the table before populating
+
       if (result.usersData && result.usersData.length > 0) {
         // Create thead
-        const thead = document.createElement('thead');
-        const headerRow = document.createElement('tr');
-        Object.keys(result.usersData[0]).forEach(key => {
-          const headerCell = document.createElement('th');
+        const thead = document.createElement("thead");
+        const headerRow = document.createElement("tr");
+
+        // Add table headers
+        Object.keys(result.usersData[0]).forEach((key) => {
+          const headerCell = document.createElement("th");
           headerCell.textContent = key.charAt(0).toUpperCase() + key.slice(1);
           headerRow.appendChild(headerCell);
         });
+
+        // Add "Action" column to the header
+        const actionHeaderCell = document.createElement("th");
+        actionHeaderCell.textContent = "Action";
+        headerRow.appendChild(actionHeaderCell);
+
         thead.appendChild(headerRow);
         table.appendChild(thead);
 
         // Create tbody
-        const tbody = document.createElement('tbody');
+        const tbody = document.createElement("tbody");
+
         result.usersData.forEach(userData => {
           const userRowElement = document.createElement('tr');
+
           Object.keys(userData).forEach(userObjectKey => {
             const cell = document.createElement('td');
             cell.textContent = userData[userObjectKey];
             userRowElement.appendChild(cell);
           });
+
+          const actionCell = document.createElement('td');
+          const detailsButton = document.createElement('button');
+          detailsButton.className = 'btn btn-link';
+          actionCell.appendChild(detailsButton);
+          userRowElement.appendChild(actionCell);
+
           tbody.appendChild(userRowElement);
         });
-        table.appendChild(tbody);
-      }
 
+        table.appendChild(tbody);
+      } else {
+        table.innerHTML = `<tr><td colspan="100%">No users found.</td></tr>`;
+      }
     } catch (err) {
-      console.error(err);
+      console.error("Error fetching users:", err);
     }
+  }
+
+  // Initial fetch of users when the page loads
+  document.addEventListener('DOMContentLoaded', () => {
+    refreshUsersList();
   });
 </script>
