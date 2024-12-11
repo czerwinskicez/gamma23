@@ -12,14 +12,20 @@
       </div>
       <div class="col-xs-12 col-md-6">
         <div class="mb-3">
+          <label for="emailAddress" class="form-label">Email address</label>
+          <input type="text" class="form-control" id="emailAddress" name="emailAddress">
+        </div>
+      </div>
+      <div class="col-xs-12 col-md-6">
+        <div class="mb-3">
           <label for="password" class="form-label">Password</label>
           <input type="password" class="form-control" id="password" name="password" required>
         </div>
       </div>
       <div class="col-xs-12 col-md-6">
         <div class="mb-3">
-          <label for="emailAddress" class="form-label">Email address</label>
-          <input type="text" class="form-control" id="emailAddress" name="emailAddress">
+          <label for="confirmPassword" class="form-label">Confirm Password</label>
+          <input type="password" class="form-control" id="confirmPassword" name="confirmPassword" required>
         </div>
       </div>
       <div class="col-xs-12 col-md-6">
@@ -28,7 +34,7 @@
           <input type="text" class="form-control" id="displayName" name="displayName">
         </div>
       </div>
-      <div class="col-xs-12">
+      <div class="col-xs-12 col-md-6">
         <div class="mb-3">
           <label for="title" class="form-label">Title</label>
           <input type="text" class="form-control" id="title" name="title">
@@ -70,6 +76,7 @@
           // Create thead
           const thead = document.createElement('thead');
           const headerRow = document.createElement('tr');
+          headerRow.classList.add("text-center");
           Object.keys(result.usersData[0]).forEach(key => {
             const headerCell = document.createElement('th');
             headerCell.textContent = key.charAt(0).toUpperCase() + key.slice(1);
@@ -143,5 +150,41 @@
     } catch (err) {
       console.error(err);
     }
+  });
+
+  // Form Validation
+  document.getElementById('createUserButton').addEventListener('click', function(event) {
+    event.preventDefault(); // Prevent form submission to manually validate
+
+    const username = document.getElementById('username').value.trim();
+    const password = document.getElementById('password').value;
+    const confirmPassword = document.getElementById('confirmPassword').value;
+    const emailAddress = document.getElementById('emailAddress').value.trim();
+    const displayName = document.getElementById('displayName').value.trim();
+
+    if (!username || !password || !confirmPassword) {
+      document.getElementById('message').textContent = 'Username, password, and confirm password are required.';
+      return;
+    }
+
+    if (password !== confirmPassword) {
+      document.getElementById('message').textContent = 'Passwords do not match.';
+      return;
+    }
+
+    if (!emailAddress) {
+      document.getElementById('message').textContent = 'Email address is required.';
+      return;
+    }
+
+    if (!displayName) {
+      document.getElementById('message').textContent = 'Display name is required.';
+      return;
+    }
+
+    document.getElementById('message').textContent = ''; // Clear previous messages
+    // If everything is fine, you can proceed to send the data to the backend
+    alert('User data is valid! Proceeding to create user...');
+    // Add backend user creation logic here
   });
 </script>

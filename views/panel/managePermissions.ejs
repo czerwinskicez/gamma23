@@ -5,6 +5,10 @@
 
     <div class="mt-4">
         <div class="row">
+            <div class="col-xs-12">
+                <div id="createPermissionMessage" class="mt-3"></div>
+            </div>
+            
             <!-- Permissions Display Section -->
             <div class="col-xs-12 col-md-6">
                 <div class="permissionsDisplay"></div>
@@ -19,9 +23,10 @@
                         <input type="text" class="form-control" id="newPermissionAction" required>
                     </div>
                     <button id="createPermissionButton" class="btn btn-primary">Create Permission</button>
-                    <div id="createPermissionMessage" class="mt-3"></div>
+                    
                 </div>
             </div>
+
         </div>
     </div>
 </div>
@@ -46,7 +51,7 @@
                 const tableHTML = `
                     <table class="table table-striped">
                         <thead>
-                            <tr>
+                            <tr class='text-center'>
                                 <th scope="col">ID</th>
                                 <th scope="col">Action</th>
                                 <th scope="col">Actions</th>
@@ -58,8 +63,8 @@
                                     <tr>
                                         <td>${permission.id}</td>
                                         <td>${permission.action}</td>
-                                        <td>
-                                            <button class="btn btn-danger deletePermissionBtn" data-id="${permission.id}">Delete</button>
+                                        <td class='text-center'>
+                                            <button class="btn btn-outline-danger deletePermissionBtn" data-id="${permission.id}">Delete</button>
                                         </td>
                                     </tr>
                                 `;
@@ -88,16 +93,19 @@
                             const deleteResult = await deleteResponse.json();
                             console.log("Delete Response:", deleteResult);
 
+                            const messageDiv = document.getElementById("createPermissionMessage");
+
                             if (deleteResponse.ok) {
-                                alert(`Permission with ID ${permissionId} deleted successfully.`);
+                                showMessage(messageDiv, `Permission with ID ${permissionId} deleted successfully.`, 'success');
                                 // Refresh the permissions list
                                 window.location.reload();
                             } else {
-                                alert(deleteResult.message || 'Error deleting permission.');
+                                showMessage(messageDiv, deleteResult.message || 'Error deleting permission.', 'danger');
                             }
                         } catch (err) {
                             console.error(err);
-                            alert('An error occurred while deleting the permission.');
+                            const messageDiv = document.getElementById("createPermissionMessage");
+                            showMessage(messageDiv, 'An error occurred while deleting the permission.', 'danger');
                         }
                     });
                 });
@@ -109,6 +117,11 @@
             document.querySelector('.permissionsDisplay').innerHTML = '<div>Error loading permissions.</div>';
         }
     });
+
+    // Function to display messages
+    function showMessage(element, message, type) {
+        element.innerHTML = `<div class="alert alert-${type}">${message}</div>`;
+    }
 </script>
 
 <script signal key="createPermissionScript">
@@ -118,7 +131,7 @@
         const createMessageDiv = document.getElementById("createPermissionMessage");
 
         if (!newPermissionAction) {
-            createMessageDiv.innerHTML = `<div class="alert alert-warning">Permission Action is required.</div>`;
+            showMessage(createMessageDiv, 'Permission Action is required.', 'warning');
             return;
         }
 
@@ -136,17 +149,22 @@
             console.log("Create Permission Response:", result);
 
             if (response.ok) {
-                createMessageDiv.innerHTML = `<div class="alert alert-success">${result.message}</div>`;
+                showMessage(createMessageDiv, result.message, 'success');
                 // Clear the input field
                 document.getElementById("newPermissionAction").value = '';
                 // Refresh the permissions list
                 window.location.reload();
             } else {
-                createMessageDiv.innerHTML = `<div class="alert alert-danger">${result.message || 'Error creating permission.'}</div>`;
+                showMessage(createMessageDiv, result.message || 'Error creating permission.', 'danger');
             }
         } catch (err) {
             console.error(err);
-            createMessageDiv.innerHTML = `<div class="alert alert-danger">An error occurred while creating the permission.</div>`;
+            showMessage(createMessageDiv, 'An error occurred while creating the permission.', 'danger');
         }
     });
+
+    // Function to display messages
+    function showMessage(element, message, type) {
+        element.innerHTML = `<div class="alert alert-${type}">${message}</div>`;
+    }
 </script>

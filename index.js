@@ -201,6 +201,52 @@ app.post(
       }
     }
 
+    // create permission
+    if (action == "createPermission") {
+      const { action: permissionAction } = req.body; // Get permission action from the request body
+
+      try {
+        if (!permissionAction) {
+          return res.status(400).json({ message: "Permission action is required." });
+        }
+
+        // Call the addPermission method to add the new permission
+        await permissionModule.addPermission(permissionAction);
+
+        return res.json({
+          message: `Permission '${permissionAction}' created successfully.`,
+          status: "OK",
+        });
+      } catch (err) {
+        console.error("Error creating permission:", err);
+        return res.status(500).json({ message: "Something went wrong while creating permission." });
+      }
+    }
+
+    // delete permission
+    if (action == "deletePermission") {
+      const { id } = req.body;  // Get the permission ID from the request body
+
+      try {
+        if (!id) {
+          return res.status(400).json({ message: "Permission ID is required." });
+        }
+
+        // Call the deletePermission method to delete the permission
+        await permissionModule.deletePermission(id);
+
+        return res.json({
+          message: `Permission with ID ${id} deleted successfully.`,
+          status: "OK",
+        });
+      } catch (err) {
+        console.error("Error deleting permission:", err);
+        return res.status(500).json({ message: "Something went wrong while deleting permission." });
+      }
+    }
+
+
+
     return res.status(400).json({ message: `Action '${action}' is not supported.` });
   }
 );
