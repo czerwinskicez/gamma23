@@ -51,14 +51,14 @@ const seedPermissions = (actions) => {
     });
 };
 
-const getPermissionsCount = () => {
-    return new Promise((resolve, reject) => {
-        db.get(`SELECT COUNT(*) AS count FROM permissions`, (err, row) => {
-            if (err) return reject(err);
-            resolve(row.count);
-        });
-    });
-};
+// const getPermissionsCount = () => {
+//     return new Promise((resolve, reject) => {
+//         db.get(`SELECT COUNT(*) AS count FROM permissions`, (err, row) => {
+//             if (err) return reject(err);
+//             resolve(row.count);
+//         });
+//     });
+// };
 
 const addPermission = (action) => {
     return new Promise((resolve, reject) => {
@@ -69,20 +69,11 @@ const addPermission = (action) => {
     });
 };
 
-const getPermissions = () => {
-    return new Promise((resolve, reject) => {
-        db.all(`SELECT * FROM permissions`, [], (err, rows) => {
-            if (err) return reject(new Error(`Error fetching permissions: ${err.message}`));
-            resolve(rows);
-        });
-    });
-};
-
 const getAllPermissions = () => {
     return new Promise((resolve, reject) => {
         db.all(`SELECT * FROM permissions`, [], (err, rows) => {
             if (err) return reject(new Error(`Error fetching all permissions: ${err.message}`));
-            resolve(rows); // Return the entire row, which includes both 'id' and 'action'
+            resolve(rows);
         });
     });
 };

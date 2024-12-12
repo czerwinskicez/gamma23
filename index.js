@@ -171,6 +171,60 @@ app.post(
       }
     }
 
+    // delete user
+    if (action == "deleteUser") {
+      const { userId } = req.body;
+      console.log(userId);
+
+      try {
+        const deletionStatus = await userModule.deleteUser(userId);
+        console.log(deletionStatus);
+
+        if (deletionStatus) {
+          return res.json({ status: "OK" });
+        }
+        return res.json({ status: "Error" });
+      } catch (err) {
+        return res.status(500).json({ message: "Delete failed."});
+      }
+    }
+
+    // edit user
+    if (action === "updateUser") {
+      const { id, username, emailAddress, displayName, title, password } = req.body;
+      const userId = id;
+
+      if (!userId) {
+        return res.status(400).json({ message: "User ID is required." });
+      }
+
+      try {
+        // Prepare the fields to update dynamically
+        const updates = {};
+
+        if (username) updates.username = username;
+        if (emailAddress) updates.email_address = emailAddress;
+        if (displayName) updates.display_name = displayName;
+        if (title) updates.title = title;
+
+        if (password) {
+          const hashedPassword = await bcrypt.hash(password, 10);
+          updates.password = hashedPassword;
+        }
+
+        const updateStatus = await userModule.updateUser(userId, updates);
+
+        if (updateStatus) {
+          return res.json({ message: "User updated successfully." });
+        } else {
+          return res.status(404).json({ message: "User not found." });
+        }
+      } catch (err) {
+        console.error("Error updating user:", err);
+        return res.status(500).json({ message: "Internal server error." });
+      }
+    }
+
     // get all users
     if (action == "getAllUsers") {
       try {
@@ -242,23 +296,6 @@ app.post(
       } catch (err) {
         console.error("Error deleting permission:", err);
         return res.status(500).json({ message: "Something went wrong while deleting permission." });
-      }
-    }
-
-    if (action == "deleteUser") {
-      const { userId } = req.body;
-      console.log(userId);
-
-      try {
-        const deletionStatus = await userModule.deleteUser(userId);
-        console.log(deletionStatus);
-
-        if (deletionStatus) {
-          return res.json({ status: "OK" });
-        }
-        return res.json({ status: "Error" });
-      } catch (err) {
-        return res.status(500).json({ message: "Delete failed."});
       }
     }
 

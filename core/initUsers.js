@@ -195,6 +195,7 @@ const addUser = ({ username, password, emailAddress, displayName, title }) => {
     });
 };
 
+// Delete user based on userId
 const deleteUser = (userId) => {
     return new Promise((resolve, reject) => {
         db.run(`DELETE FROM users WHERE id=?;`, [Number(userId)], async function (err) {
@@ -206,6 +207,43 @@ const deleteUser = (userId) => {
         });
     });
 };
+
+// User update based on given data
+const updateUser = (userId, updates) => {
+    return new Promise((resolve, reject) => {
+      // Build the dynamic SQL query based on provided fields
+      const fields = Object.keys(updates);
+  
+      if (fields.length === 0) {
+        return reject(new Error("No updates provided."));
+      }
+  
+      const setClause = fields.map((field) => `${field} = ?`).join(", ");
+      const values = fields.map((field) => updates[field]);
+  
+      // Append userId to the values array for the WHERE clause
+      values.push(userId);
+  
+      db.run(
+        `UPDATE users SET ${setClause} WHERE id = ?`,
+        values,
+        function (err) {
+          if (err) {
+            console.error("DB Error updating user:", err.message);
+            return reject(new Error(`Error updating user: ${err.message}`));
+          }
+  
+          // Check if a row was actually updated
+          if (this.changes === 0) {
+            return resolve(false); // No user found with the given ID
+          }
+  
+          resolve(true); // User updated successfully
+        }
+      );
+    });
+  };
+  
 
 const getAllUsers = () => {
     return new Promise((resolve, reject) => {
@@ -228,6 +266,7 @@ module.exports = {
     createToken,
     verifyToken,
     deleteToken,
+    updateUser,
     addUser,
     deleteUser,
     getAllUsers,

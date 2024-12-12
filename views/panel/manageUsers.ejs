@@ -77,8 +77,10 @@
         </div>
         <div class="modal-body">
           <!-- Hidden field for User ID -->
-          <input type="hidden" id="editUserId" name="editUserId">
-
+          <div class="mb-3">
+            <label for="editUserId" class="form-label">User ID</label>
+            <input type="text" class="form-control" id="editUserId" name="editUserId" required disabled>
+          </div>
           <div class="mb-3">
             <label for="editUsername" class="form-label">Username</label>
             <input type="text" class="form-control" id="editUsername" name="editUsername" required>
@@ -251,7 +253,7 @@ setTimeout(async () => {
       };
 
       const response = await fetch("/api/authorized/updateUser", {
-        method: "PUT",
+        method: "POST",
         headers: {
           "Content-Type": "application/json",
           "x-bearer": sessionStorage.getItem("token")
