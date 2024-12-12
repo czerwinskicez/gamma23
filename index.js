@@ -41,7 +41,7 @@ app.get('/login', (req, res) => {
 function verifyPermission(getAction) {
   return async (req, res, next) => {
     const action = getAction(req);
-    console.log("Action:", action); // Debug
+    // console.log("Action:", action); // Debug
 
     try {
       if (req.user.isAdmin) {
@@ -245,6 +245,23 @@ app.post(
       }
     }
 
+    if (action == "deleteUser") {
+      const { userId } = req.body;
+      console.log(userId);
+
+      try {
+        const deletionStatus = await userModule.deleteUser(userId);
+        console.log(deletionStatus);
+
+        if (deletionStatus) {
+          return res.json({ status: "OK" });
+        }
+        return res.json({ status: "Error" });
+      } catch (err) {
+        return res.status(500).json({ message: "Delete failed."});
+      }
+    }
+
 
 
     return res.status(400).json({ message: `Action '${action}' is not supported.` });
@@ -278,8 +295,8 @@ app.get(
   }
 );
 
-// Render the dashboard page
-app.get('/dashboard', (req, res) => {
+// Render the panel page
+app.get('/panel', (req, res) => {
   return res.render('layout', { 
     filename: 'context', 
   });

@@ -11,11 +11,17 @@ signal{
     display: none;
 }
 
+
 ::selection {
     background-color: darken($primary, 23%);
 }
 
 @import "../node_modules/bootstrap/scss/bootstrap.scss";
+
+.btn-primary:hover,
+.btn-primary:active{
+    background-color: darken($primary, 10%);
+}
 
 // .chakra-petch-regular {
 //   font-family: "Chakra Petch", sans-serif;

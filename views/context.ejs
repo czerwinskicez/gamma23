@@ -59,7 +59,7 @@
           <div class="d-flex w-100 justify-content-between">
             <h5 class='mb-1' signal-key="displayName"></h5>
           </div>
-          <p class="mb-1" signal-key="title">System Administrator</p>
+          <p class="mb-1" signal-key="title"></p>
           <small class="sidenav-manage-account">Manage account</small>
         </a>
       </ul>
@@ -67,6 +67,7 @@
         <a href="#" class="list-group-item list-group-item-action" context-button="dashboard">Dashboard</a>
       </ul>
       <ul class="list-group">
+        <a href="#" class="list-group-item list-group-item-action" context-button="usersOnline">Users online</a>
         <a href="#" class="list-group-item list-group-item-action" context-button="eventStream">Event stream</a>
         <a href="#" class="list-group-item list-group-item-action" context-button="allowedDomains">Allowed domains</a>
         <a href="#" class="list-group-item list-group-item-action disabled" context-button="geolocationAnalytics">Geolocation analytics</a>
@@ -181,6 +182,7 @@
 
         if (response.ok) {
           sessionStorage.removeItem('token');
+          sessionStorage.removeItem('Signals_store');
           window.location.href = '/login';
         } else {
           const data = await response.json();

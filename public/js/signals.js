@@ -1,10 +1,14 @@
 // public/js/signals.js
 
+let _Signals = window._Signals || {};
+
+_Signals.store = _Signals.store || JSON.parse(window.sessionStorage.getItem("Signals_store")) || {};
+
+
 let Signal = window.Signal || ((signalKey, signalValue = "")=>{
     Signals[signalKey] = signalValue;
 });
 let Signals = window.Signals || {};
-let _Signals = window._Signals || {};
 
 _Signals.updateElementsValues = _ => {
     Object.keys(Signals).forEach(signalKey=>{
@@ -22,7 +26,10 @@ _Signals.signalHandler = {
             // console.log(`Property '${prop}' added with value '${value}'.`);
         }
         obj[prop] = value; // Perform the actual property assignment
+        _Signals.store[prop] = value;
         _Signals.updateElementsValues();
+
+        window.sessionStorage.setItem("Signals_store", JSON.stringify(_Signals.store));
         return true; // Indicate success
     },
     deleteProperty: function(obj, prop) {
@@ -70,3 +77,9 @@ try {
         document.body.append(newSignalElement);
     });
 } catch (_) { false; }
+
+setTimeout(_=>{
+    Object.keys(_Signals.store).forEach(storeKey=>{
+        Signal(storeKey, _Signals.store[storeKey]);
+    });
+}, 1);

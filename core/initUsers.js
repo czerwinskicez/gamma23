@@ -44,7 +44,7 @@ const initializeUsers = () => {
                     token TEXT PRIMARY KEY,
                     user_id INTEGER NOT NULL,
                     expires_at INTEGER NOT NULL,
-                    FOREIGN KEY(user_id) REFERENCES users(id)
+                    FOREIGN KEY(user_id) REFERENCES users(id) ON DELETE CASCADE
                 )
             `, (err) => {
                 if (err) console.error("Error creating tokens table:", err);
@@ -55,7 +55,7 @@ const initializeUsers = () => {
                 CREATE TABLE IF NOT EXISTS user_permissions (
                     user_id INTEGER NOT NULL,
                     permission_id INTEGER NOT NULL,
-                    FOREIGN KEY(user_id) REFERENCES users(id),
+                    FOREIGN KEY(user_id) REFERENCES users(id) ON DELETE CASCADE,
                     FOREIGN KEY(permission_id) REFERENCES permissions(id),
                     PRIMARY KEY (user_id, permission_id)
                 )
@@ -195,6 +195,18 @@ const addUser = ({ username, password, emailAddress, displayName, title }) => {
     });
 };
 
+const deleteUser = (userId) => {
+    return new Promise((resolve, reject) => {
+        db.run(`DELETE FROM users WHERE id=?;`, [Number(userId)], async function (err) {
+            if(err){
+                console.error("Error deleting user: ", err.message);
+                return reject(new Error(`Error deleting user: ${err.message}`));
+            }
+            resolve(false);
+        });
+    });
+};
+
 const getAllUsers = () => {
     return new Promise((resolve, reject) => {
         db.all(
@@ -217,6 +229,7 @@ module.exports = {
     verifyToken,
     deleteToken,
     addUser,
+    deleteUser,
     getAllUsers,
     addUserPermission,
     getUserPermissions,
