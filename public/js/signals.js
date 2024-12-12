@@ -20,21 +20,16 @@ _Signals.updateElementsValues = _ => {
 
 _Signals.signalHandler = {
     set: function(obj, prop, value) {
-        if (obj.hasOwnProperty(prop)) {
-            // console.log(`Property '${prop}' changed from '${obj[prop]}' to '${value}'.`);
-        } else {
-            // console.log(`Property '${prop}' added with value '${value}'.`);
-        }
-        obj[prop] = value; // Perform the actual property assignment
+        // if (obj.hasOwnProperty(prop)) {} else {}
+        obj[prop] = value;
         _Signals.store[prop] = value;
         _Signals.updateElementsValues();
 
         window.sessionStorage.setItem("Signals_store", JSON.stringify(_Signals.store));
-        return true; // Indicate success
+        return true;
     },
     deleteProperty: function(obj, prop) {
         if (obj.hasOwnProperty(prop)) {
-            // console.log(`Property '${prop}' deleted.`);
             delete obj[prop];
             _Signals.updateElementsValues();
             return true;
@@ -55,12 +50,6 @@ _Signals.signalClock = _Signals.signalClock || setInterval(_=>{
 
 _Signals.scriptClock = _Signals.scriptClock || setInterval(_=>{
     document.querySelectorAll("script[signal]:not([dispatched='true'])").forEach(scriptSignal=>{
-        // // console.log(scriptSignal.innerText);
-        // scriptSignal.setAttribute("dispatched", "true");
-
-        // const newSignalElement = document.createElement("signal");
-        // newSignalElement.innerHTML=scriptSignal.innerText;
-        // console.log(newSignalElement);
         const scriptElement = document.createElement("script");
         scriptElement.textContent = scriptSignal.textContent;
         scriptSignal.setAttribute('dispatched', 'true')

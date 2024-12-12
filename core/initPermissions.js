@@ -51,14 +51,14 @@ const seedPermissions = (actions) => {
     });
 };
 
-// const getPermissionsCount = () => {
-//     return new Promise((resolve, reject) => {
-//         db.get(`SELECT COUNT(*) AS count FROM permissions`, (err, row) => {
-//             if (err) return reject(err);
-//             resolve(row.count);
-//         });
-//     });
-// };
+const getPermissionsCount = () => {
+    return new Promise((resolve, reject) => {
+        db.get(`SELECT COUNT(*) AS count FROM permissions`, (err, row) => {
+            if (err) return reject(err);
+            resolve(row.count);
+        });
+    });
+};
 
 const addPermission = (action) => {
     return new Promise((resolve, reject) => {
@@ -94,7 +94,6 @@ const deletePermission = (id) => {
 module.exports = {
     initializePermissions,
     addPermission,
-    getPermissions,
     getAllPermissions,
     deletePermission,
 };

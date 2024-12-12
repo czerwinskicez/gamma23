@@ -307,7 +307,7 @@ app.post(
 
 // API endpoint to fetch protected dashboard data
 app.get(
-  '/api/dashboard-data/:panelContext',
+  '/api/dashboard/:panelContext',
   verifyTokenMiddleware,
   verifyPermission((req) => `view_${req.params.panelContext}`), // Derive permission from panelContext
   async (req, res) => {

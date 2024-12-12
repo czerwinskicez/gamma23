@@ -120,7 +120,7 @@
     `;
 
     // Fetch the authenticated context content
-    fetch(`/api/dashboard-data/${contextToFetch}`, {
+    fetch(`/api/dashboard/${contextToFetch}`, {
       method: 'GET',
       headers: {
         'x-bearer': token
