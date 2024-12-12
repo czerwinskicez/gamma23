@@ -3,52 +3,58 @@
     <h2>Manage Users</h2>
   </div>
   <div class="mt-4">
+    
+    <h4>Create User</h4>
+    <form class="createUserForm">
     <div class="row">
-      <div class="col-12 col-md-6">
-        <div class="mb-3">
-          <label for="username" class="form-label">Username</label>
-          <input type="text" class="form-control" id="username" name="username" required>
+        <div class="col-12 col-md-6">
+          <div class="mb-3">
+            <label for="username" class="form-label">Username</label>
+            <input type="text" class="form-control" id="username" name="username" required>
+          </div>
         </div>
-      </div>
-      <div class="col-12 col-md-6">
-        <div class="mb-3">
-          <label for="emailAddress" class="form-label">Email address</label>
-          <input type="text" class="form-control" id="emailAddress" name="emailAddress">
+        <div class="col-12 col-md-6">
+          <div class="mb-3">
+            <label for="emailAddress" class="form-label">Email address</label>
+            <input type="email" class="form-control" id="emailAddress" name="emailAddress">
+          </div>
         </div>
-      </div>
-      <div class="col-12 col-md-6">
-        <div class="mb-3">
-          <label for="password" class="form-label">Password</label>
-          <input type="password" class="form-control" id="password" name="password" required>
+        <div class="col-12 col-md-6">
+          <div class="mb-3">
+            <label for="password" class="form-label">Password</label>
+            <input type="password" class="form-control" id="password" name="password" required>
+          </div>
         </div>
-      </div>
-      <div class="col-12 col-md-6">
-        <div class="mb-3">
-          <label for="confirmPassword" class="form-label">Confirm Password</label>
-          <input type="password" class="form-control" id="confirmPassword" name="confirmPassword" required>
+        <div class="col-12 col-md-6">
+          <div class="mb-3">
+            <label for="confirmPassword" class="form-label">Confirm Password</label>
+            <input type="password" class="form-control" id="confirmPassword" name="confirmPassword" required>
+          </div>
         </div>
-      </div>
-      <div class="col-12 col-md-6">
-        <div class="mb-3">
-          <label for="displayName" class="form-label">Display Name</label>
-          <input type="text" class="form-control" id="displayName" name="displayName">
+        <div class="col-12 col-md-6">
+          <div class="mb-3">
+            <label for="displayName" class="form-label">Display Name</label>
+            <input type="text" class="form-control" id="displayName" name="displayName">
+          </div>
         </div>
-      </div>
-      <div class="col-12 col-md-6">
-        <div class="mb-3">
-          <label for="title" class="form-label">Title</label>
-          <input type="text" class="form-control" id="title" name="title">
+        <div class="col-12 col-md-6">
+          <div class="mb-3">
+            <label for="title" class="form-label">Title</label>
+            <input type="text" class="form-control" id="title" name="title">
+          </div>
         </div>
-      </div>
-      <div class="col-12 text-center">
-        <button id="createUserButton" class="btn btn-primary">Create User</button>
-      </div>
+        <div class="col-12 text-center">
+          <button id="createUserButton" class="btn btn-primary" type="submit">Create User</button>
+          
+        </div>
     </div>
+  </form>
+    
+    <div id="message" class="mt-3"></div>
   </div>
-  <div id="message" class="mt-3"></div>
 
   <div class="mt-5">
-    <h3>Users List</h3>
+    <h4>Users List</h4>
     <div class="row">
       <div class="col-xs-12">
 
@@ -114,8 +120,13 @@
 
 <script dev signal key="createUserScript">
 
-  document.getElementById("createUserButton").addEventListener("click", async () => {
-    const username = document.getElementById("username").value;
+
+  // Handle form validation for user creation
+  document.querySelectorAll(".createUserForm").forEach(createUserForm=>{
+    createUserForm.addEventListener("submit", async (e)=>{
+      e.preventDefault();
+
+      const username = document.getElementById("username").value;
     const password = document.getElementById("password").value;
     const confirmPassword = document.getElementById("confirmPassword").value;
     const displayName = document.getElementById("displayName").value;
@@ -174,6 +185,7 @@
     document.getElementById("emailAddress").value = '';
     document.getElementById("displayName").value = '';
     document.getElementById("title").value = '';
+    });
   });
 
 setTimeout(async () => {
@@ -184,8 +196,6 @@ setTimeout(async () => {
   }
 });
 
-</script>
-<script dev signal key="editUserScript">
   // Function to open the edit user modal and populate it with user data
   function openEditUserModal(userData) {
     // Populate the modal fields with user data
@@ -380,56 +390,6 @@ setTimeout(async () => {
         });
       }
 
-      // document.querySelectorAll(".usersTable").forEach(usersTableElement=>{
-      //   usersTableElement.innerHTML = ``;
-      //   // console.log(usersTableElement);
-
-      //   const usersTableTBody = document.createElement("tbody");
-      //   console.log(result.user);
-      // });
-
-      // const table = document.getElementById("usersTable");
-      // table.innerHTML = ""; // Clear the table before populating
-
-      // if (result.usersData && result.usersData.length > 0) {
-      //   // Create thead
-      //   const thead = document.createElement("thead");
-      //   const headerRow = document.createElement("tr");
-
-      //   // Add table headers
-      //   Object.keys(result.usersData[0]).forEach((key) => {
-      //     const headerCell = document.createElement("th");
-      //     headerCell.textContent = key.charAt(0).toUpperCase() + key.slice(1);
-      //     headerRow.appendChild(headerCell);
-      //   });
-
-      //   // Add "Action" column to the header
-      //   const actionHeaderCell = document.createElement("th");
-      //   actionHeaderCell.textContent = "Action";
-      //   headerRow.appendChild(actionHeaderCell);
-
-      //   thead.appendChild(headerRow);
-      //   table.appendChild(thead);
-
-      //   // Create tbody
-      //   const tbody = document.createElement("tbody");
-
-      //   result.usersData.forEach(userData => {
-      //     const userRowElement = document.createElement('tr');
-
-      //     Object.keys(userData).forEach(userObjectKey => {
-      //       const cell = document.createElement('td');
-      //       cell.textContent = userData[userObjectKey];
-      //       userRowElement.appendChild(cell);
-      //     });
-
-      //     tbody.appendChild(userRowElement);
-      //   });
-
-      //   table.appendChild(tbody);
-      // } else {
-      //   table.innerHTML = `<tr><td colspan="100%">No users found.</td></tr>`;
-      // }
     } catch (err) {
       console.error("Error fetching users:", err);
     }
