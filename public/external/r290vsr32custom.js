@@ -56,7 +56,8 @@ document.addEventListener("DOMContentLoaded", _=>{
                 let customDiv = document.createElement('div');
                 customDiv.className = 'custom-secondary-section';
                 if (id) customDiv.id = id;
-                customDiv.innerHTML = content;
+                customDiv.innerHTML = `<div class='secondary-section-overlay'></div>`;
+                customDiv.innerHTML += content;
             
                 // Replace the original tag with the new div
                 fileContent = fileContent.replace(match[0], customDiv.outerHTML);
