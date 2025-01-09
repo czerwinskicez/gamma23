@@ -12,13 +12,136 @@
     <div class="mt-4">
         <div class="top-wrapper">
             <h2>Manage instances</h2>
-            <button class="btn btn-primary create-instance-button">
+            <!-- Updated Button with data attributes to trigger modal -->
+            <button type="button" class="btn btn-primary create-instance-button" data-bs-toggle="modal" data-bs-target="#createInstanceModal">
                 Create new
             </button>
         </div>
     </div>
 </div>
 
-<script>
+<!-- Modal HTML -->
+<div class="modal fade" id="createInstanceModal" tabindex="-1" aria-labelledby="createInstanceModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-lg"> <!-- Makes the modal wide -->
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="createInstanceModalLabel">Create New Instance</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <form class="create-instance-form">
+          <div class="modal-body">
+              <div class="mb-3">
+                  <label for="instanceName" class="form-label">Instance Name</label>
+                  <input type="text" class="form-control" id="instanceName" name="instanceName" required>
+                  <div class="invalid-feedback">
+                      Please enter an instance name.
+                  </div>
+              </div>
+              <div class="mb-3">
+                  <label for="allowedDomains" class="form-label">Allowed Domains</label>
+                  <input type="text" class="form-control" id="allowedDomains" name="allowedDomains" placeholder="e.g., example.com, mysite.org" required>
+                  <div class="invalid-feedback">
+                      Please enter at least one allowed domain.
+                  </div>
+              </div>
+              <div class="mb-3">
+                  <label for="databaseName" class="form-label">Database Name</label>
+                  <input type="text" class="form-control" id="databaseName" name="databaseName" pattern="^[a-z_]+$" required oninvalid="this.setCustomValidity('Database name must contain only lowercase letters and underscores (_).')">
+                  <div class="invalid-feedback">
+                      Database name must contain only lowercase letters and underscores.
+                  </div>
+              </div>
+          </div>
+          <div class="modal-footer">
+              <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+              <button type="submit" class="btn btn-primary">Create Instance</button>
+          </div>
+      </form>
+    </div>
+  </div>
+</div>
 
+<script signal>
+document.querySelectorAll(".create-instance-form").forEach(createInstanceForm => {
+    createInstanceForm.addEventListener("submit", (event) => {
+        event.preventDefault(); // Prevent the default form submission
+
+        // Select input fields within the form
+        const instanceNameField = createInstanceForm.querySelector("#instanceName");
+        const allowedDomainsField = createInstanceForm.querySelector("#allowedDomains");
+        const databaseNameField = createInstanceForm.querySelector("#databaseName"); // Corrected ID
+
+        // Initialize a flag to track form validity
+        let isValid = true;
+
+        // Clear previous error messages
+        clearErrors(createInstanceForm);
+
+        // === Validation Logic ===
+
+        // 1. Validate Instance Name (must not be empty)
+        if (!instanceNameField.value.trim()) {
+            showError(instanceNameField, "Instance name cannot be empty.");
+            isValid = false;
+        }
+
+        // 2. Validate Allowed Domains (must be valid domains)
+        const domains = allowedDomainsField.value.split(',').map(domain => domain.trim()).filter(domain => domain !== "");
+        const domainRegex = /^(?!:\/\/)([a-zA-Z0-9-_]+\.)+[a-zA-Z]{2,}$/;
+
+        if (domains.length === 0) {
+            showError(allowedDomainsField, "At least one domain is required.");
+            isValid = false;
+        } else {
+            for (let domain of domains) {
+                if (!domainRegex.test(domain)) {
+                    showError(allowedDomainsField, `Invalid domain format: "${domain}".`);
+                    isValid = false;
+                    break; // Stop checking after the first invalid domain
+                }
+            }
+        }
+
+        // 3. Validate Database Name (only lowercase letters and underscores)
+        const dbNameRegex = /^[a-z_]+$/;
+        if (!dbNameRegex.test(databaseNameField.value)) {
+            showError(databaseNameField, "Database name must contain only lowercase letters and underscores (_).");
+            isValid = false;
+        }
+
+        // === Submission Logic ===
+
+        if (isValid) {
+            // If all validations pass, you can proceed with form submission.
+            // This could be an AJAX request or simply submitting the form.
+            // For example, to submit the form normally:
+            createInstanceForm.submit();
+        }
+    });
+});
+
+/**
+ * Displays an error message for a specific input field.
+ * @param {HTMLElement} inputField - The input field where the error occurred.
+ * @param {string} message - The error message to display.
+ */
+function showError(inputField, message) {
+    // Create an error message element
+    const error = document.createElement("span");
+    error.className = "error-message";
+    error.style.color = "red";
+    error.textContent = message;
+
+    // Append the error message after the input field
+    inputField.parentNode.appendChild(error);
+}
+
+/**
+ * Clears all error messages within the form.
+ * @param {HTMLElement} form - The form element to clear errors from.
+ */
+function clearErrors(form) {
+    const errors = form.querySelectorAll(".error-message");
+    errors.forEach(error => error.remove());
+}
 </script>
