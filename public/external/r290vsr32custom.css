@@ -4,6 +4,10 @@ body {
 
 .custom-toggle-label{
     display: flex;
+
+    padding: 5px 0;
+
+    border-bottom: 1px solid #404040;
 }
 .custom-toggle-label span.zobacz-button{
     display: block;
@@ -11,6 +15,9 @@ body {
 
     padding: 10px 50px;
     background-color: #0a1728;
+
+    color: white;
+    text-transform: uppercase;
 }
 
 .custom-toggle-label span.zobacz-button:hover{
@@ -18,5 +25,5 @@ body {
 }
 
 .custom-toggle-label::before{
-    display: none;
+    display: none!important;
 }
