@@ -8,4 +8,15 @@ body {
 .custom-toggle-label span.zobacz-button{
     display: block;
     margin-left: auto;
+
+    padding: 10px 50px;
+    background-color: #0a1728;
+}
+
+.custom-toggle-label span.zobacz-button:hover{
+    background-color: #d41316;
+}
+
+.custom-toggle-label::before{
+    display: none;
 }
