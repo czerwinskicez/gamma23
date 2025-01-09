@@ -4,6 +4,7 @@ const cssEndpointPathname = "public/external/r290vsr32custom.css";
 document.addEventListener("DOMContentLoaded", _=>{
     if(location.pathname=='/glowna_preprod'){
         const collapsibles = document.querySelectorAll(".collapsible");
+        collapsibles[0].style.borderTop = 0;
     
         // modify collapsibles
         collapsibles.forEach(collapsible=>{
