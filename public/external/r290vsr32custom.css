@@ -1,3 +1,11 @@
 body {
-    background-color: lime;
+    /* background-color: lime; */
+}
+
+.custom-toggle-label{
+    display: flex;
+}
+.custom-toggle-label span.zobacz-button{
+    display: block;
+    margin-left: auto;
 }
