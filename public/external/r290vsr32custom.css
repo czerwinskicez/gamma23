@@ -28,3 +28,7 @@ body {
 .custom-toggle-label::before{
     display: none!important;
 }
+
+.custom-ranking-head{
+    background-color: #004f9e;
+}
