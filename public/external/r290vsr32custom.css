@@ -8,11 +8,9 @@ body {
 
     padding: 12px 0;
     
-    border-bottom: 1px solid #404040;
-}
-
-.custom-toggle-label:last-of-type{
-    border-bottom: 0;
+    &:not(:last-of-type){
+        border-bottom: 1px solid #404040;
+    }
 }
 
 .custom-toggle-label span.zobacz-button{
