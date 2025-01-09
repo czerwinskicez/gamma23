@@ -6,7 +6,8 @@ document.addEventListener("DOMContentLoaded", _=>{
             // toggleLabel.style.display = "flex";
             toggleLabel.classList.add("custom-toggle-label");
             
-            const zobaczButton = document.createElement("span.zobacz-button");
+            const zobaczButton = document.createElement("span");
+            zobaczButton.classList.add("zobacz-button");
             zobaczButton.innerText = "Zobacz";
             // zobaczButton.style.display = "block";
             // zobaczButton.style.marginLeft = "auto";
