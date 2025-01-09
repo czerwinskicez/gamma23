@@ -2,7 +2,7 @@ body {
     /* background-color: lime; */
 }
 
-.custom-toggle-label{
+.custom-toggle-label:not(:last-child){
     display: flex;
     align-items: center;
 
