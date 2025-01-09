@@ -23,15 +23,17 @@ document.addEventListener("DOMContentLoaded", _=>{
 
         // replace [ranking_head]
         const fileContent = document.body.innerHTML;
-        const regex = /\[ranking_head\](.*?)\[\/ranking_head\]/s;
+        const regex = /\[ranking_head(?:#(\w+))?\](.*?)\[\/ranking_head\]/s;
         const match = fileContent.match(regex);
 
         if (match) {
-            const content = match[1];
+            const id = match[1] || '';
+            const content = match[2];
 
-            // Insert the content into the custom-ranking-head div
+            // Insert the content into the custom-ranking-head div with optional id
             let customDiv = document.createElement('div');
             customDiv.className = 'custom-ranking-head';
+            if (id) customDiv.id = id;
             customDiv.innerHTML = content;
 
             // Replace the original tags with the new div
