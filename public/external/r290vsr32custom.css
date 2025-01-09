@@ -2,13 +2,17 @@ body {
     /* background-color: lime; */
 }
 
-.custom-toggle-label:not(:last-of-type){
+.custom-toggle-label{
     display: flex;
     align-items: center;
 
     padding: 12px 0;
     
     border-bottom: 1px solid #404040;
+}
+
+.custom-toggle-label:last-of-type{
+    border-bottom: 0;
 }
 
 .custom-toggle-label span.zobacz-button{
