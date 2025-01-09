@@ -23,24 +23,47 @@ document.addEventListener("DOMContentLoaded", _=>{
         });
 
         // replace [ranking_head]
-        const regex = /\[ranking_head(?:#(\w+))?\](.*?)\[\/ranking_head\]/gs;
-        let fileContent = document.body.innerHTML;
-        let match;
-        while ((match = regex.exec(fileContent)) !== null) {
-            const id = match[1] || '';
-            const content = match[2];
-        
-            // Create the custom-ranking-head div with optional id
-            let customDiv = document.createElement('div');
-            customDiv.className = 'custom-ranking-head';
-            if (id) customDiv.id = id;
-            customDiv.innerHTML = content;
-        
-            // Replace the original tag with the new div
-            fileContent = fileContent.replace(match[0], customDiv.outerHTML);
+        const replaceRankingHead = _=>{
+            const regex = /\[ranking_head(?:#(\w+))?\](.*?)\[\/ranking_head\]/gs;
+            let fileContent = document.body.innerHTML;
+            let match;
+            while ((match = regex.exec(fileContent)) !== null) {
+                const id = match[1] || '';
+                const content = match[2];
+            
+                // Create the custom-ranking-head div with optional id
+                let customDiv = document.createElement('div');
+                customDiv.className = 'custom-ranking-head';
+                if (id) customDiv.id = id;
+                customDiv.innerHTML = content;
+            
+                // Replace the original tag with the new div
+                fileContent = fileContent.replace(match[0], customDiv.outerHTML);
+            }
+            document.body.innerHTML = fileContent;
         }
-        document.body.innerHTML = fileContent;
-        
+        replaceRankingHead();
+
+        const replaceSecondarySection = _ => {
+            const regex = /\[secondary_section(?:#(\w+))?\](.*?)\[\/secondary_section\]/gs;
+            let fileContent = document.body.innerHTML;
+            let match;
+            while ((match = regex.exec(fileContent)) !== null) {
+                const id = match[1] || '';
+                const content = match[2];
+            
+                // Create the custom-secondary-section div with optional id
+                let customDiv = document.createElement('div');
+                customDiv.className = 'custom-secondary-section';
+                if (id) customDiv.id = id;
+                customDiv.innerHTML = content;
+            
+                // Replace the original tag with the new div
+                fileContent = fileContent.replace(match[0], customDiv.outerHTML);
+            }
+            document.body.innerHTML = fileContent;
+        }
+        replaceSecondarySection();
 
         // load custom css
         const link = document.createElement("link");
