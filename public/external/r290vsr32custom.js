@@ -1,3 +1,6 @@
+const filesLocationDomain = "https://gamma.23.net.pl/";
+const cssEndpointPathname = "public/external/r290vsr32custom.css";
+
 document.addEventListener("DOMContentLoaded", _=>{
     const collapsibles = document.querySelectorAll(".collapsible");
 
@@ -20,7 +23,7 @@ document.addEventListener("DOMContentLoaded", _=>{
         // load custom css
         const link = document.createElement("link");
         link.rel = "stylesheet";
-        link.href = "https://gamma.23.net.pl/public/external/r290vsr32custom.css";
+        link.href = filesLocationDomain + cssEndpointPathname;
         link.type = "text/css";
         link.media = "all";
         document.head.appendChild(link);
