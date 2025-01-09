@@ -1,1 +1,3 @@
-console.log(document.querySelectorAll(".collapsible"));
+document.addEventListener("DOMContentLoaded", _=>{
+    console.log(document.querySelectorAll(".collapsible"));
+});
