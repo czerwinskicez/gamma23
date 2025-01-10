@@ -21,12 +21,12 @@ document.addEventListener("DOMContentLoaded", _=>{
             document.body.innerHTML = document.body.innerHTML.replace(regex, content);
           };
 
-        // replaceTags("[ikona_co/]", `
-        //     <div class='toggle-label-icon'><img src='${coIconAddress}'></div>
-        // `);
-        // replaceTags("[ikona_podlogowka/]", `
-        //     <div class='toggle-label-icon'><img src='${podlogowkaIconAddress}'></div>
-        // `);
+        replaceTags("[ikona_co/]", `
+            <div class='toggle-label-icon'><img src='${coIconAddress}'></div>
+        `);
+        replaceTags("[ikona_podlogowka/]", `
+            <div class='toggle-label-icon'><img src='${podlogowkaIconAddress}'></div>
+        `);
 
         const collapsibles = document.querySelectorAll(".collapsible");
     
