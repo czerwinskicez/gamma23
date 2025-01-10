@@ -4,9 +4,17 @@ const cssEndpointPathname = "public/external/r290vsr32custom.css";
 const coIconPathname = "public/external/ikony_co.svg";
 const podlogowkaIconPathname = "public/external/ikony_podlogowka.svg";
 
+const copIconPathname = "public/external/ikony_COP.svg";
+const halasIconPathname = "public/external/ikony_halas.svg";
+const mocIconPathname = "public/external/ikony_moc.svg";
+
 const cssEndpointAddress = filesLocationDomain + cssEndpointPathname;
 const coIconAddress = filesLocationDomain + coIconPathname;
 const podlogowkaIconAddress = filesLocationDomain + podlogowkaIconPathname;
+
+const copIconAddress = filesLocationDomain + copIconPathname;
+const halasIconAddress = filesLocationDomain + halasIconPathname;
+const mocIconAddress = filesLocationDomain + mocIconPathname;
 
 document.addEventListener("DOMContentLoaded", _=>{
     if(location.pathname=='/glowna_preprod'){
@@ -34,6 +42,16 @@ document.addEventListener("DOMContentLoaded", _=>{
         replaceTags("[ikona_podlogowka/]", `
             <img class='toggle-label-icon' src='${podlogowkaIconAddress}'>
         `);
+        replaceTags("[ikona_cop/]", `
+            <img class='section-icon' src='${copIconAddress}'>    
+        `);
+        replaceTags("[ikona_halas/]", `
+            <img class='section-icon' src='${halasIconAddress}'>    
+        `);
+        replaceTags("[ikona_moc/]", `
+            <img class='section-icon' src='${mocIconAddress}'>    
+        `);
+
         replaceTags("[red_decor/]", `<div class='red-decor-custom'></div>`);
         replaceTags("[karty_cta/]", `
             <div class="cta-cards-wrapper">
@@ -42,7 +60,7 @@ document.addEventListener("DOMContentLoaded", _=>{
                     <div class='cta-card-content'>
                         <h3>Moc grzewcza</h3>
                         <a href="${location.origin+location.pathname}#rankingmocygrzewczej">
-                            <span>Zobacz ranking</span><span>&gt</span>
+                            <span>Zobacz ranking</span><span>&nbsp;&nbsp;&gt</span>
                         </a>
                     </div>
                 </div>    
@@ -51,7 +69,7 @@ document.addEventListener("DOMContentLoaded", _=>{
                     <div class='cta-card-content'>
                         <h3>Wartość współczynnika COP</h3>
                         <a href="${location.origin+location.pathname}#rankingcop">
-                            <span>Zobacz ranking</span><span>&gt</span>
+                            <span>Zobacz ranking</span><span>&nbsp;&nbsp;&gt</span>
                         </a>
                     </div>
                 </div>    
