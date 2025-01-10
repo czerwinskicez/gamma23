@@ -129,8 +129,8 @@ document.addEventListener("DOMContentLoaded", _=>{
         };
         replaceSecondarySection();
 
-        document.querySelectorAll(".page-title")[0].classList.remove("page-title");
-        document.querySelectorAll(".subtitle")[0].classList.remove("subtitle");
+        document.querySelectorAll(".page-title")[0].style.textAlign = "left";
+        document.querySelectorAll(".subtitle")[0].style.textAlign = "left";
         
 
         // load custom css
