@@ -17,7 +17,7 @@ const halasIconAddress = filesLocationDomain + halasIconPathname;
 const mocIconAddress = filesLocationDomain + mocIconPathname;
 
 document.addEventListener("DOMContentLoaded", _=>{
-    if(location.pathname=='/glowna_preprod'){
+    if(location.pathname=='/glowna_preprod' || document.body.includes("[load_custom_scripts/]")){
 
         /**
          * @param {BB tag} tag (eg. [ikona_co/])
@@ -51,6 +51,7 @@ document.addEventListener("DOMContentLoaded", _=>{
         replaceTags("[ikona_moc/]", `
             <img class='section-icon' src='${mocIconAddress}'>    
         `);
+        replaceTags("[load_custom_scripts/]",``);
 
         replaceTags("[red_decor/]", `<div class='red-decor-custom'></div>`);
         replaceTags("[karty_cta/]", `
