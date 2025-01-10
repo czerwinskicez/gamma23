@@ -70,7 +70,7 @@ body {
 .cta-cards-wrapper {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
-    gap: 32px;
+    gap: 1.23em;
 }
 .cta-cards-wrapper .cta-card{
     background-color: #dce6ff;
@@ -87,10 +87,12 @@ body {
     text-transform: uppercase;
     margin-top: 1em;
 }
-.cta-cards-wrapper .cta-card-content a:link{
+.cta-cards-wrapper .cta-card-content a:link,
+.cta-cards-wrapper .cta-card-content a:visited{
     color: white;
 }
-.cta-cards-wrapper .cta-card-content a:hover{
+.cta-cards-wrapper .cta-card-content a:hover,
+.cta-cards-wrapper .cta-card-content a:active{
     background-color: #d41316;
     background-size: 0;
 }
