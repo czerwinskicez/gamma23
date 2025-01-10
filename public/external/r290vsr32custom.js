@@ -20,11 +20,11 @@ document.addEventListener("DOMContentLoaded", _=>{
             const regex = new RegExp(escapedTag, 'g');
             document.body.innerHTML = document.body.innerHTML.replace(regex, content);
         };
-        
+
         const replaceAnchorTargets = () => {
             const regex = /\[anchor_target#([^\]]+?)\/\]/g;
             document.body.innerHTML = document.body.innerHTML.replace(regex, (_, id) => `<div id="${id}"></div>`);
-          };
+        };
           
         replaceAnchorTargets();
 
@@ -129,6 +129,9 @@ document.addEventListener("DOMContentLoaded", _=>{
         };
         replaceSecondarySection();
 
+        document.querySelectorAll(".page-title")[0].classList.remove("page-title");
+        document.querySelectorAll(".subtitle")[0].classList.remove("subtitle");
+        
 
         // load custom css
         const link = document.createElement("link");
