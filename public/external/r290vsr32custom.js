@@ -19,7 +19,14 @@ document.addEventListener("DOMContentLoaded", _=>{
             const escapedTag = tag.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
             const regex = new RegExp(escapedTag, 'g');
             document.body.innerHTML = document.body.innerHTML.replace(regex, content);
+        };
+        
+        const replaceAnchorTargets = () => {
+            const regex = /\[anchor_target#([^\]]+?)\/\]/g;
+            document.body.innerHTML = document.body.innerHTML.replace(regex, (_, id) => `<div id="${id}"></div>`);
           };
+          
+        replaceAnchorTargets();
 
         replaceTags("[ikona_co/]", `
             <img class='toggle-label-icon' src='${coIconAddress}'>
