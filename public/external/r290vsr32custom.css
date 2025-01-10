@@ -79,7 +79,7 @@ body {
 .cta-cards-wrapper .cta-card-content{
     padding: 2.32em;
 }
-.cta-cards-wrapper .cta-card-content button{
+.cta-cards-wrapper .cta-card-content a{
     margin-left: auto;
     padding: 7px 3em;
     background-color: #0a1728;
@@ -87,6 +87,6 @@ body {
     text-transform: uppercase;
     margin-top: 1em;
 }
-.cta-cards-wrapper .cta-card-content button:hover{
+.cta-cards-wrapper .cta-card-content a:hover{
     background-color: #d41316;
 }
