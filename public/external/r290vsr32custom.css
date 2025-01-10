@@ -123,3 +123,9 @@ body {
     border-radius: 0 50% 50% 0;
     margin-bottom: 3em;
 }
+
+.section-icon{
+    position: absolute;
+    right: 0;
+    transform: translateY(-50%);
+}
