@@ -79,3 +79,14 @@ body {
 .cta-cards-wrapper .cta-card-content{
     padding: 2.32em;
 }
+.cta-cards-wrapper .cta-card-content button{
+    margin-left: auto;
+    padding: 7px 3em;
+    background-color: #0a1728;
+    color: white;
+    text-transform: uppercase;
+    margin-top: 1em;
+}
+.cta-cards-wrapper .cta-card-content button:hover{
+    background-color: #d41316;
+}
