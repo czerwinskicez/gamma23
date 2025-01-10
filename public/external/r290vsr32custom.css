@@ -8,7 +8,7 @@ body {
 
     padding: 12px 0;
     
-    border-top: 1px solid #404040;
+    border-bottom: 1px solid #404040;
 }
 
 .custom-toggle-label span.zobacz-button{
@@ -37,4 +37,22 @@ body {
     font-weight: 700;
     font-size: 1.2em;
     margin-bottom: 10px;
+}
+
+/* secondary section background */
+.secondary-section-custom{
+    position: relative;
+}
+.secondary-section-custom .secondary-section-content{
+    position: relative;
+}
+.secondary-section-custom .secondary-section-overlay{
+    top: 0;
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+    height: 100%;
+    width: 100vw;
+    background: #f9faff;
+    z-index: -10;
 }

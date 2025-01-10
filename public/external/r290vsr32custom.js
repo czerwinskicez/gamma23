@@ -4,7 +4,6 @@ const cssEndpointPathname = "public/external/r290vsr32custom.css";
 document.addEventListener("DOMContentLoaded", _=>{
     if(location.pathname=='/glowna_preprod'){
         const collapsibles = document.querySelectorAll(".collapsible");
-        collapsibles[0].style.borderTop = 0;
     
         // modify collapsibles
         collapsibles.forEach(collapsible=>{
@@ -57,7 +56,7 @@ document.addEventListener("DOMContentLoaded", _=>{
                 customDiv.className = 'custom-secondary-section';
                 if (id) customDiv.id = id;
                 customDiv.innerHTML = `<div class='secondary-section-overlay'></div>`;
-                customDiv.innerHTML += content;
+                customDiv.innerHTML += `<div class='secondary-section-content'>${content}</div>`;
             
                 // Replace the original tag with the new div
                 fileContent = fileContent.replace(match[0], customDiv.outerHTML);
