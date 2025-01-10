@@ -87,6 +87,10 @@ body {
     text-transform: uppercase;
     margin-top: 1em;
 }
+.cta-cards-wrapper .cta-card-content a:link{
+    color: white;
+}
 .cta-cards-wrapper .cta-card-content a:hover{
     background-color: #d41316;
+    background-size: 0;
 }
