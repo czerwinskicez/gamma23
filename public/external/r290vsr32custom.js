@@ -33,21 +33,27 @@ document.addEventListener("DOMContentLoaded", _=>{
                     <img src="https://www.r290vsr32.pl/content/pl/uploads/202501/moc_grzewcza.png" alt="Moc grzewcza">
                     <div class='cta-card-content'>
                         <h3>Moc grzewcza</h3>
-                        <a href="${location.href}#rankingmocygrzewczej">Zobacz ranking&nbsp;&nbsp;&gt;</a>
+                        <a href="${location.href}#rankingmocygrzewczej">
+                            <span>Zobacz ranking</span><span>&gt</span>;
+                        </a>
                     </div>
                 </div>    
                 <div class='cta-card'>
                     <img src="https://www.r290vsr32.pl/content/pl/uploads/202501/wspolczynnik_cop.png" alt="Współczynnik COP">
                     <div class='cta-card-content'>
-                        <h3>Moc grzewcza</h3>
-                        <a href="${location.href}#rankingcop">Zobacz ranking&nbsp;&nbsp;&gt;</a>
+                        <h3>Wartość współczynnika COP</h3>
+                        <a href="${location.href}#rankingcop">
+                            <span>Zobacz ranking</span><span>&gt</span>;
+                        </a>
                     </div>
                 </div>    
                 <div class='cta-card'>
                     <img src="https://www.r290vsr32.pl/content/pl/uploads/202501/moc_akustyczna.png" alt="Moc akustyczna">
                     <div class='cta-card-content'>
-                        <h3>Moc grzewcza</h3>
-                        <a href="${location.href}#rankingmocyakustycznej">Zobacz ranking&nbsp;&nbsp;&gt;</a>
+                        <h3>Moc akustyczna</h3>
+                        <a href="${location.href}#rankingmocyakustycznej">
+                            <span>Zobacz ranking</span><span>&gt</span>;
+                        </a>
                     </div>
                 </div>
             </div>
