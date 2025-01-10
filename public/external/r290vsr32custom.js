@@ -14,6 +14,7 @@ document.addEventListener("DOMContentLoaded", _=>{
     
         // modify collapsibles
         collapsibles.forEach(collapsible=>{
+            collapsible.classList.add("custom-collapsible");
             collapsible.querySelectorAll("label.toggle-label").forEach(toggleLabel=>{
                 // toggleLabel.style.display = "flex";
                 toggleLabel.classList.add("custom-toggle-label");
