@@ -34,6 +34,7 @@ document.addEventListener("DOMContentLoaded", _=>{
         replaceTags("[ikona_podlogowka/]", `
             <img class='toggle-label-icon' src='${podlogowkaIconAddress}'>
         `);
+        replaceTags("[red_decor/]", `<div class='red-decor-custom'></div>`);
         replaceTags("[karty_cta/]", `
             <div class="cta-cards-wrapper">
                 <div class='cta-card'>
