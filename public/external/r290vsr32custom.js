@@ -56,7 +56,7 @@ document.addEventListener("DOMContentLoaded", _=>{
         replaceTags("[karty_cta/]", `
             <div class="cta-cards-wrapper">
                 <div class='cta-card'>
-                    <img src="https://www.r290vsr32.pl/content/pl/uploads/202501/moc_grzewcza.png" alt="Moc grzewcza">
+                    <img src="https://www.r290vsr32.pl/content/pl/uploads/202501/foto_moc_1000x575px.jpg" alt="Moc grzewcza">
                     <div class='cta-card-content'>
                         <h3>Moc grzewcza</h3>
                         <a href="${location.origin+location.pathname}#rankingmocygrzewczej">
@@ -65,7 +65,7 @@ document.addEventListener("DOMContentLoaded", _=>{
                     </div>
                 </div>    
                 <div class='cta-card'>
-                    <img src="https://www.r290vsr32.pl/content/pl/uploads/202501/wspolczynnik_cop.png" alt="Współczynnik COP">
+                    <img src="https://www.r290vsr32.pl/content/pl/uploads/202501/foto_cop_1000x575px.jpg" alt="Współczynnik COP">
                     <div class='cta-card-content'>
                         <h3>Wartość współczynnika COP</h3>
                         <a href="${location.origin+location.pathname}#rankingcop">
@@ -74,7 +74,7 @@ document.addEventListener("DOMContentLoaded", _=>{
                     </div>
                 </div>    
                 <div class='cta-card'>
-                    <img src="https://www.r290vsr32.pl/content/pl/uploads/202501/moc_akustyczna.png" alt="Moc akustyczna">
+                    <img src="https://www.r290vsr32.pl/content/pl/uploads/202501/foto_halas_1000x575px.jpg" alt="Moc akustyczna">
                     <div class='cta-card-content'>
                         <h3>Moc akustyczna</h3>
                         <a href="${location.origin+location.pathname}#rankingmocyakustycznej">
