@@ -33,21 +33,21 @@ document.addEventListener("DOMContentLoaded", _=>{
                     <img src="https://www.r290vsr32.pl/content/pl/uploads/202501/moc_grzewcza.png" alt="Moc grzewcza">
                     <div class='cta-card-content'>
                         <h3>Moc grzewcza</h3>
-                        <a href="#rankingmocygrzewczej">Zobacz ranking &gt;</a>
+                        <a href="${location.href}#rankingmocygrzewczej">Zobacz ranking &gt;</a>
                     </div>
                 </div>    
                 <div class='cta-card'>
                     <img src="https://www.r290vsr32.pl/content/pl/uploads/202501/wspolczynnik_cop.png" alt="Współczynnik COP">
                     <div class='cta-card-content'>
                         <h3>Moc grzewcza</h3>
-                        <a href="#rankingcop">Zobacz ranking &gt;</a>
+                        <a href="${location.href}#rankingcop">Zobacz ranking &gt;</a>
                     </div>
                 </div>    
                 <div class='cta-card'>
                     <img src="https://www.r290vsr32.pl/content/pl/uploads/202501/moc_akustyczna.png" alt="Moc akustyczna">
                     <div class='cta-card-content'>
                         <h3>Moc grzewcza</h3>
-                        <a href="#rankingmocyakustycznej">Zobacz ranking &gt;</a>
+                        <a href="${location.href}#rankingmocyakustycznej">Zobacz ranking &gt;</a>
                     </div>
                 </div>
             </div>
