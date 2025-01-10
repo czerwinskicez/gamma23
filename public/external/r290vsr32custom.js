@@ -151,6 +151,11 @@ document.addEventListener("DOMContentLoaded", _=>{
         document.querySelectorAll(".page-title")[0].style.display = "none";
         document.querySelectorAll(".subtitle")[0].style.display = "none";
         
+        document.querySelectorAll("a.email-hash").forEach(hashedMailElement=>{
+            if(hashedMailElement.innerText.endsWith("=")){
+                hashedMailElement.innerText = atob(hashedMailElement.innerText)
+            }
+        })
 
         // load custom css
         const link = document.createElement("link");
