@@ -27,6 +27,27 @@ document.addEventListener("DOMContentLoaded", _=>{
         replaceTags("[ikona_podlogowka/]", `
             <img class='toggle-label-icon' src='${podlogowkaIconAddress}'>
         `);
+        replaceTags("[karta_moc_grzewcza/]", `
+            <div class='cta-card'>
+                <img src="https://www.r290vsr32.pl/content/pl/uploads/202501/moc_grzewcza.png" alt="">a
+                <h3>Moc grzewcza</h3>
+                <a href="#rankingmocygrzewczej">Zobacz ranking &gt;</a>
+            </div>    
+        `);
+        replaceTags("[karta_wspolczynnik_cop/]", `
+            <div class='cta-card'>
+                <img src="https://www.r290vsr32.pl/content/pl/uploads/202501/wspolczynnik_cop.png" alt="">a
+                <h3>Moc grzewcza</h3>
+                <a href="#rankingcop">Zobacz ranking &gt;</a>
+            </div>    
+        `);
+        replaceTags("[karta_moc_akustyczna/]", `
+            <div class='cta-card'>
+                <img src="https://www.r290vsr32.pl/content/pl/uploads/202501/moc_akustyczna.png" alt="">a
+                <h3>Moc grzewcza</h3>
+                <a href="#rankingmocyakustycznej">Zobacz ranking &gt;</a>
+            </div>    
+        `);
 
         const collapsibles = document.querySelectorAll(".collapsible");
     

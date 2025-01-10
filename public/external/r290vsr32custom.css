@@ -42,6 +42,9 @@ body {
 /* secondary section background */
 .secondary-section-custom{
     position: relative;
+
+    padding: 3em 0;
+    margin: 3em 0;
 }
 .secondary-section-custom .secondary-section-content{
     position: relative;
@@ -60,4 +63,6 @@ body {
 .custom-collapsible .toggle-label-icon {
     width: 64px;
     height: 64px;
+
+    margin-right: 1.23em;
 }
