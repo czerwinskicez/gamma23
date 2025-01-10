@@ -76,6 +76,10 @@ body {
     .cta-cards-wrapper{
         grid-template-columns: 1fr;
     }
+    .cta-cards-wrapper .cta-card {
+        max-width: 523px;
+        margin: auto;
+    }
 }
 .cta-cards-wrapper .cta-card{
     display: flex;
@@ -93,7 +97,7 @@ body {
 }
 
 .cta-cards-wrapper h3{
-    margin-bottom: 2.32em;
+    margin-bottom: 1em;
 }
 .cta-cards-wrapper .cta-card-content a{
     align-self: flex-start;
