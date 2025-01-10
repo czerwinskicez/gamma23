@@ -53,7 +53,7 @@ document.addEventListener("DOMContentLoaded", _=>{
             
                 // Create the custom-secondary-section div with optional id
                 let customDiv = document.createElement('div');
-                customDiv.className = 'custom-secondary-section';
+                customDiv.className = 'secondary-section-custom';
                 if (id) customDiv.id = id;
                 customDiv.innerHTML = `<div class='secondary-section-overlay'></div>`;
                 customDiv.innerHTML += `<div class='secondary-section-content'>${content}</div>`;
