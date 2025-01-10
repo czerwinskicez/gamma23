@@ -34,7 +34,7 @@ document.addEventListener("DOMContentLoaded", _=>{
                     <div class='cta-card-content'>
                         <h3>Moc grzewcza</h3>
                         <a href="${location.href}#rankingmocygrzewczej">
-                            <span>Zobacz ranking</span><span>&gt</span>;
+                            <span>Zobacz ranking</span><span>&gt</span>
                         </a>
                     </div>
                 </div>    
@@ -43,7 +43,7 @@ document.addEventListener("DOMContentLoaded", _=>{
                     <div class='cta-card-content'>
                         <h3>Wartość współczynnika COP</h3>
                         <a href="${location.href}#rankingcop">
-                            <span>Zobacz ranking</span><span>&gt</span>;
+                            <span>Zobacz ranking</span><span>&gt</span>
                         </a>
                     </div>
                 </div>    
@@ -52,7 +52,7 @@ document.addEventListener("DOMContentLoaded", _=>{
                     <div class='cta-card-content'>
                         <h3>Moc akustyczna</h3>
                         <a href="${location.href}#rankingmocyakustycznej">
-                            <span>Zobacz ranking</span><span>&gt</span>;
+                            <span>Zobacz ranking</span><span>&gt</span>
                         </a>
                     </div>
                 </div>

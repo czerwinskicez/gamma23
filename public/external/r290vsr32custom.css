@@ -69,7 +69,7 @@ body {
 
 .cta-cards-wrapper {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+    grid-template-columns: repeat(auto-fit, minmax(323px, 1fr));
     gap: 1.23em;
 }
 .cta-cards-wrapper .cta-card{
