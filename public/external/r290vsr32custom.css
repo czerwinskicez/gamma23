@@ -169,3 +169,8 @@ footer .gdpr_terms a:hover{
         display: none;
     }
 }
+@media (max-width: 900px) {
+    .custom-toggle-label .custom-ndash{
+        display: none;
+    }
+}
