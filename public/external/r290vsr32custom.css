@@ -163,3 +163,9 @@
 footer .gdpr_terms a:hover{
     color: #d41316;
 }
+
+@media (min-width: 900px) {
+    .custom-toggle-label br{
+        display: none;
+    }
+}
