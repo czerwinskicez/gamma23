@@ -17,7 +17,7 @@ const halasIconAddress = filesLocationDomain + halasIconPathname;
 const mocIconAddress = filesLocationDomain + mocIconPathname;
 
 document.addEventListener("DOMContentLoaded", _=>{
-    if(location.pathname=='/glowna_preprod' || document.body.includes("[load_custom_scripts/]")){
+    if(document.body.includes("[load_custom_scripts/]")){
 
         /**
          * @param {BB tag} tag (eg. [ikona_co/])
