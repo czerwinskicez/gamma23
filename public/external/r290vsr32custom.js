@@ -51,6 +51,9 @@ document.addEventListener("DOMContentLoaded", _=>{
         replaceTags("[ikona_moc/]", `
             <img class='section-icon' src='${mocIconAddress}'>    
         `);
+        replaceTags("[br/]", `
+            <br>  
+        `);
         replaceTags("[load_custom_scripts/]",``);
 
         replaceTags("[red_decor/]", `<div class='red-decor-custom'></div>`);
