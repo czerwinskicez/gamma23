@@ -17,7 +17,7 @@ const halasIconAddress = filesLocationDomain + halasIconPathname;
 const mocIconAddress = filesLocationDomain + mocIconPathname;
 
 document.addEventListener("DOMContentLoaded", _=>{
-    if(document.body.includes("[load_custom_scripts/]")){
+    if(String(document.body.innerHTML).includes("[load_custom_scripts/]")){
 
         /**
          * @param {BB tag} tag (eg. [ikona_co/])
