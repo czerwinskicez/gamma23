@@ -22,23 +22,6 @@ body {
     text-transform: uppercase;
 }
 
-
-@media (max-width: 700px){
-    .custom-toggle-label{
-        padding: 0.23em 0;
-    }
-
-    .custom-collapsible .toggle-label-icon{
-        width: 32px;
-        height: 32px;
-        margin-right: 0.23em;
-    }
-
-    .custom-toggle-label span.zobacz-button{
-        padding: 7px 1em;
-    }
-}
-
 .custom-toggle-label span.zobacz-button:hover{
     background-color: #d41316;
 }
@@ -145,4 +128,21 @@ body {
     position: absolute;
     right: 0;
     transform: translateY(-50%);
+}
+
+
+@media (max-width: 700px){
+    .custom-toggle-label{
+        padding: 0.23em 0;
+    }
+
+    .custom-collapsible .toggle-label-icon{
+        width: 32px;
+        height: 32px;
+        margin-right: 0.23em;
+    }
+
+    .custom-toggle-label span.zobacz-button{
+        padding: 7px 1em;
+    }
 }
