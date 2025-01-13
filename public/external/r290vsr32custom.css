@@ -123,8 +123,8 @@
 .section-icon{
     position: absolute;
     right: 0;
-    /* transform: translateY(-50%); */
-    max-width: 20vw;
+    transform: translateY(-23%);
+    max-width: 15vw;
 }
 
 
