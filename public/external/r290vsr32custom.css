@@ -164,13 +164,23 @@ footer .gdpr_terms a:hover{
     color: #d41316;
 }
 
+
+.custom-toggle-label br{
+    display: block;
+}
+.custom-toggle-label .custom-ndash{
+    display: none;
+}
 @media (min-width: 900px) {
     .custom-toggle-label br{
         display: none;
     }
+    .custom-toggle-label .custom-ndash{
+        display: block;
+    }
 }
-@media (max-width: 900px) {
+/* @media (max-width: 900px) {
     .custom-toggle-label .custom-ndash{
         display: none;
     }
-}
+} */
