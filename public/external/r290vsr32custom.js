@@ -52,7 +52,7 @@ document.addEventListener("DOMContentLoaded", _=>{
             <img class='section-icon' src='${mocIconAddress}'>    
         `);
         replaceTags("[br/]", `
-            <br>  
+            <br><span class='custom-ndash'>&nbsp;&ndash;&nbsp;</span>  
         `);
         replaceTags("[load_custom_scripts/]",``);
 
