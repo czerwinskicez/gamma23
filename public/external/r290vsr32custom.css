@@ -137,12 +137,14 @@ body {
     }
 
     .custom-collapsible .toggle-label-icon{
-        width: 32px;
-        height: 32px;
+        width: 40px;
+        height: 40px;
         margin-right: 0.23em;
     }
 
     .custom-toggle-label span.zobacz-button{
         padding: 7px 1em;
+        font-size: 0.77em;
+        margin-left: 0.23em;
     }
 }
